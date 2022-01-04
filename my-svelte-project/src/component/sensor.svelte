@@ -28,6 +28,13 @@
 
     export let chartRefRumble;
     export let charRefTemperature;
+
+    function addDataPoint() {
+        chartRefRumble.addDataPoint("Wed", [Math.random() * 20]);
+
+        charRefTemperature.removeDataPoint(0);
+        charRefTemperature.addDataPoint("wed", [Math.random() * 20]);
+    }
 </script>
 
 <div>
@@ -38,4 +45,6 @@
     <Chart {data} type="line" bind:this={chartRefRumble} />
     <h3>온도</h3>
     <Chart {data} type="line" bind:this={charRefTemperature} />
+
+    <button on:click={addDataPoint}>Add data point</button>
 </div>
