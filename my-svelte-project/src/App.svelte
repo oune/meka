@@ -1,6 +1,5 @@
 <script>
     import Sensor from "./component/sensor.svelte";
-    import Test from "./component/test.svelte";
 </script>
 
 <h1>고장 진단 시스템</h1>
