@@ -1,5 +1,6 @@
 <script>
     import Sensor from "./component/sensor.svelte";
+    import Test from "./component/test.svelte";
 </script>
 
 <h1>고장 진단 시스템</h1>
@@ -9,6 +10,7 @@
     <Sensor sensorNum="3" />
     <Sensor sensorNum="4" />
 </div>
+<Test />
 
 <style>
     .sensorContainer {
