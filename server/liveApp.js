@@ -14,8 +14,11 @@ const io = require("socket.io")(httpServer, {
 });
 
 io.on("connection", (socket) => {
-    console.log(`connection on: ${socket.id}`)
     sockets.push(socket)
+
+    //log
+    console.log(`connection on: ${socket.id}`)
+    console.log(`total sockets: ${sockets.length}`)
 });
 
 const sockets = []
@@ -24,8 +27,9 @@ httpServer.listen(port, (socket) => {
 })
 
 setInterval(() => {
-    // console.log("!")
     sockets.forEach((socket) => {
-        socket.emit("data", Math.random() * 20)
+        const vide = Math.random() * 2
+        const temp = Math.random() * 30
+        socket.emit("data", { vibe: vide, temp: temp })
     })
 }, 1000)

@@ -10,7 +10,6 @@
     <Sensor sensorNum="3" />
     <Sensor sensorNum="4" />
 </div>
-<Test />
 
 <style>
     .sensorContainer {
