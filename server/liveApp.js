@@ -50,10 +50,8 @@ var server = net.createServer(function (client) {
         console.log('----------------------------------------')
         const strs = packet.toString().split("\t")
 
-        const sencorPort = strs[0]
-        const date = strs[1]
-        const data = strs[2]
-        console.log(sencorPort)
+        const date = strs[0]
+        const data = strs[1]
         console.log(date)
         console.log(data)
     });
