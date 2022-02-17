@@ -44,15 +44,18 @@ var server = net.createServer(function (client) {
     client.setTimeout(500);
     client.setEncoding('utf8');
 
-    client.on('data', function (data) {
-        console.log('Received data from client on port %d: %s', client.remotePort, data.toString());
+    client.on('data', function (packet) {
+        console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
         console.log('  Bytes received: ' + client.bytesRead);
         console.log('----------------------------------------')
-        const strs = data.toString().split("\t")
-        const date = strs[0]
-        const num = strs[1]
+        const strs = packet.toString().split("\t")
+
+        const sencorPort = strs[0]
+        const date = strs[1]
+        const data = strs[2]
+        console.log(sencorPort)
         console.log(date)
-        console.log(num)
+        console.log(data)
     });
 
     client.on('end', function () {
