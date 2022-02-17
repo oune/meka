@@ -5,12 +5,8 @@
 
     const socket = io("http://localhost:3000/");
     let data = {
-        labels: ["start"],
-        datasets: [
-            {
-                values: [0],
-            },
-        ],
+        labels: [],
+        datasets: [{ values: [] }],
     };
 
     socket.on("connect", () => {
@@ -20,11 +16,19 @@
     let chartRefRumble;
     let charRefTemperature;
 
+    let count = 0;
     socket.on("data", (arg) => {
         const { vibe, temp } = arg;
 
-        chartRefRumble.addDataPoint("label", [vibe]);
-        charRefTemperature.addDataPoint("label", [temp]);
+        chartRefRumble.addDataPoint(".", [vibe]);
+        charRefTemperature.addDataPoint(".", [temp]);
+
+        if (count > 50) {
+            charRefTemperature.removeDataPoint(0);
+            chartRefRumble.removeDataPoint(0);
+        } else {
+            count++;
+        }
     });
 </script>
 

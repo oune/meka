@@ -4,6 +4,7 @@ const { Server } = require("socket.io");
 
 const app = express();
 const httpServer = createServer(app);
+const httpServer2 = createServer(app);
 const port = 3000
 
 const io = require("socket.io")(httpServer, {
@@ -15,7 +16,6 @@ const io = require("socket.io")(httpServer, {
 
 io.on("connection", (socket) => {
     sockets.push(socket)
-
     //log
     console.log(`connection on: ${socket.id}`)
     console.log(`total sockets: ${sockets.length}`)
@@ -33,3 +33,7 @@ setInterval(() => {
         socket.emit("data", { vibe: vide, temp: temp })
     })
 }, 1000)
+
+httpServer2.listen(3001, (socket) => {
+    console.log(`Example app listening at http://localhost:${3001}`)
+})
