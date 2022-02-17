@@ -59,7 +59,7 @@ var server0 = net.createServer(function (client) {
 
     client.on('end', function () {
         console.log('Client disconnected');
-        server.getConnections(function (err, count) {
+        server0.getConnections(function (err, count) {
             console.log('Remaining Connections: ' + count);
         });
     });
@@ -106,7 +106,7 @@ var server1 = net.createServer(function (client) {
 
     client.on('end', function () {
         console.log('Client disconnected');
-        server.getConnections(function (err, count) {
+        server1.getConnections(function (err, count) {
             console.log('Remaining Connections: ' + count);
         });
     });
