@@ -81,30 +81,6 @@ server0.listen(3001, function () {
     });
 });
 
-const app1 = express();
-const httpServer1 = createServer(app1);
-
-const io1 = require("socket.io")(httpServer1, {
-    cors: {
-        origin: "http://localhost:5000",
-        methods: ["GET", "POST"]
-    }
-});
-
-io1.on("connection", (socket) => {
-    console.log(`connection on: ${socket.id}`)
-});
-
-io1.on("data", (packet) => {
-    console.log(packet)
-});
-
-httpServer1.listen(3002, (socket) => {
-    console.log(`Example app listening at http://localhost:${3002}`)
-})
-
-
-
 // var server1 = net.createServer(function (client) {
 //     console.log('Client connection: ');
 //     console.log('   local = %s:%s', client.localAddress, client.localPort);
