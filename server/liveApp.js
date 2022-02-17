@@ -1,6 +1,7 @@
 const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+const net = require('net');
 
 const app = express();
 const httpServer = createServer(app);
@@ -32,54 +33,6 @@ setInterval(() => {
         socket.emit("data", { vibe: vide, temp: temp })
     })
 }, 1000)
-
-
-var net = require('net');
-// var server0 = net.createServer(function (client) {
-//     console.log('Client connection: ');
-//     console.log('   local = %s:%s', client.localAddress, client.localPort);
-//     console.log('   remote = %s:%s', client.remoteAddress, client.remotePort);
-
-//     client.setTimeout(500);
-//     client.setEncoding('utf8');
-
-//     client.on('data', function (packet) {
-//         console.log('server 0')
-//         console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
-//         console.log('  Bytes received: ' + client.bytesRead);
-//         const strs = packet.toString().split("\t")
-
-//         const date = strs[0]
-//         const data = strs[1]
-//         console.log(date)
-//         console.log(data)
-//         console.log('----------------------------------------')
-//     });
-
-//     client.on('end', function () {
-//         console.log('Client disconnected');
-//         server0.getConnections(function (err, count) {
-//             console.log('Remaining Connections: ' + count);
-//         });
-//     });
-
-//     client.on('error', function (err) {
-//         console.log('Socket Error: ', JSON.stringify(err));
-//     });
-
-//     client.on('timeout', function () {
-//         console.log('Socket Timed out');
-//     });
-// });
-// server0.listen(3001, function () {
-//     console.log('Server listening: ' + JSON.stringify(server0.address()));
-//     server0.on('close', function () {
-//         console.log('Server Terminated');
-//     });
-//     server0.on('error', function (err) {
-//         console.log('Server Error: ', JSON.stringify(err));
-//     });
-// });
 
 function makeSensorSocket(port) {
     const server = net.createServer((client) => {
@@ -130,5 +83,7 @@ function makeSensorSocket(port) {
     });
 }
 
-makeSensorSocket(3001)
-makeSensorSocket(3002)
+const portList = [3001, 3002]
+portList.forEach((port) => {
+    makeSensorSocket(port)
+})
