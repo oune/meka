@@ -91,7 +91,7 @@ function makeSensorSocket(port) {
         client.setEncoding('utf8');
 
         client.on('data', (packet) => {
-            console.log('server 1')
+            console.log(`server ${port}`)
             console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
             console.log('  Bytes received: ' + client.bytesRead);
             const strs = packet.toString().split("\t")
