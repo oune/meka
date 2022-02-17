@@ -45,6 +45,7 @@ var server0 = net.createServer(function (client) {
     client.setEncoding('utf8');
 
     client.on('data', function (packet) {
+        console.log('server 0')
         console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
         console.log('  Bytes received: ' + client.bytesRead);
         const strs = packet.toString().split("\t")
@@ -91,6 +92,7 @@ var server1 = net.createServer(function (client) {
     client.setEncoding('utf8');
 
     client.on('data', function (packet) {
+        console.log('server 1')
         console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
         console.log('  Bytes received: ' + client.bytesRead);
         const strs = packet.toString().split("\t")
