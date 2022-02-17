@@ -4,7 +4,6 @@ const { Server } = require("socket.io");
 
 const app = express();
 const httpServer = createServer(app);
-const httpServer2 = createServer(app);
 const port = 3000
 
 const io = require("socket.io")(httpServer, {
@@ -82,49 +81,72 @@ server0.listen(3001, function () {
     });
 });
 
-var net = require('net');
-var server1 = net.createServer(function (client) {
-    console.log('Client connection: ');
-    console.log('   local = %s:%s', client.localAddress, client.localPort);
-    console.log('   remote = %s:%s', client.remoteAddress, client.remotePort);
+const app1 = express();
+const httpServer1 = createServer(app1);
 
-    client.setTimeout(500);
-    client.setEncoding('utf8');
-
-    client.on('data', function (packet) {
-        console.log('server 1')
-        console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
-        console.log('  Bytes received: ' + client.bytesRead);
-        const strs = packet.toString().split("\t")
-
-        const date = strs[0]
-        const data = strs[1]
-        console.log(date)
-        console.log(data)
-        console.log('----------------------------------------')
-    });
-
-    client.on('end', function () {
-        console.log('Client disconnected');
-        server1.getConnections(function (err, count) {
-            console.log('Remaining Connections: ' + count);
-        });
-    });
-
-    client.on('error', function (err) {
-        console.log('Socket Error: ', JSON.stringify(err));
-    });
-
-    client.on('timeout', function () {
-        console.log('Socket Timed out');
-    });
+const io1 = require("socket.io")(httpServer1, {
+    cors: {
+        origin: "http://localhost:5000",
+        methods: ["GET", "POST"]
+    }
 });
-server1.listen(3002, function () {
-    console.log('Server listening: ' + JSON.stringify(server1.address()));
-    server1.on('close', function () {
-        console.log('Server Terminated');
-    });
-    server1.on('error', function (err) {
-        console.log('Server Error: ', JSON.stringify(err));
-    });
+
+io1.on("connection", (socket) => {
+    console.log(`connection on: ${socket.id}`)
 });
+
+io1.on("data", (packet) => {
+    console.log(packet)
+});
+
+httpServer1.listen(3002, (socket) => {
+    console.log(`Example app listening at http://localhost:${3002}`)
+})
+
+
+
+// var server1 = net.createServer(function (client) {
+//     console.log('Client connection: ');
+//     console.log('   local = %s:%s', client.localAddress, client.localPort);
+//     console.log('   remote = %s:%s', client.remoteAddress, client.remotePort);
+
+//     client.setTimeout(500);
+//     client.setEncoding('utf8');
+
+//     client.on('data', function (packet) {
+//         console.log('server 1')
+//         console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
+//         console.log('  Bytes received: ' + client.bytesRead);
+//         const strs = packet.toString().split("\t")
+
+//         const date = strs[0]
+//         const data = strs[1]
+//         console.log(date)
+//         console.log(data)
+//         console.log('----------------------------------------')
+//     });
+
+//     client.on('end', function () {
+//         console.log('Client disconnected');
+//         server1.getConnections(function (err, count) {
+//             console.log('Remaining Connections: ' + count);
+//         });
+//     });
+
+//     client.on('error', function (err) {
+//         console.log('Socket Error: ', JSON.stringify(err));
+//     });
+
+//     client.on('timeout', function () {
+//         console.log('Socket Timed out');
+//     });
+// });
+// server1.listen(3002, function () {
+//     console.log('Server listening: ' + JSON.stringify(server1.address()));
+//     server1.on('close', function () {
+//         console.log('Server Terminated');
+//     });
+//     server1.on('error', function (err) {
+//         console.log('Server Error: ', JSON.stringify(err));
+//     });
+// });
