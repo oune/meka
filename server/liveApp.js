@@ -42,7 +42,7 @@ var server = net.createServer(function (client) {
     console.log('   remote = %s:%s', client.remoteAddress, client.remotePort);
 
     client.setTimeout(500);
-    client.setEncoding('ANSI');
+    client.setEncoding('ascii');
 
     client.on('data', function (data) {
         console.log('Received data from client on port %d: %s', client.remotePort, data.toString());
