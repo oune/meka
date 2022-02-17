@@ -35,53 +35,7 @@ setInterval(() => {
 
 
 var net = require('net');
-var server0 = net.createServer(function (client) {
-    console.log('Client connection: ');
-    console.log('   local = %s:%s', client.localAddress, client.localPort);
-    console.log('   remote = %s:%s', client.remoteAddress, client.remotePort);
-
-    client.setTimeout(500);
-    client.setEncoding('utf8');
-
-    client.on('data', function (packet) {
-        console.log('server 0')
-        console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
-        console.log('  Bytes received: ' + client.bytesRead);
-        const strs = packet.toString().split("\t")
-
-        const date = strs[0]
-        const data = strs[1]
-        console.log(date)
-        console.log(data)
-        console.log('----------------------------------------')
-    });
-
-    client.on('end', function () {
-        console.log('Client disconnected');
-        server0.getConnections(function (err, count) {
-            console.log('Remaining Connections: ' + count);
-        });
-    });
-
-    client.on('error', function (err) {
-        console.log('Socket Error: ', JSON.stringify(err));
-    });
-
-    client.on('timeout', function () {
-        console.log('Socket Timed out');
-    });
-});
-server0.listen(3001, function () {
-    console.log('Server listening: ' + JSON.stringify(server0.address()));
-    server0.on('close', function () {
-        console.log('Server Terminated');
-    });
-    server0.on('error', function (err) {
-        console.log('Server Error: ', JSON.stringify(err));
-    });
-});
-
-// var server1 = net.createServer(function (client) {
+// var server0 = net.createServer(function (client) {
 //     console.log('Client connection: ');
 //     console.log('   local = %s:%s', client.localAddress, client.localPort);
 //     console.log('   remote = %s:%s', client.remoteAddress, client.remotePort);
@@ -90,7 +44,7 @@ server0.listen(3001, function () {
 //     client.setEncoding('utf8');
 
 //     client.on('data', function (packet) {
-//         console.log('server 1')
+//         console.log('server 0')
 //         console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
 //         console.log('  Bytes received: ' + client.bytesRead);
 //         const strs = packet.toString().split("\t")
@@ -104,7 +58,7 @@ server0.listen(3001, function () {
 
 //     client.on('end', function () {
 //         console.log('Client disconnected');
-//         server1.getConnections(function (err, count) {
+//         server0.getConnections(function (err, count) {
 //             console.log('Remaining Connections: ' + count);
 //         });
 //     });
@@ -117,12 +71,64 @@ server0.listen(3001, function () {
 //         console.log('Socket Timed out');
 //     });
 // });
-// server1.listen(3002, function () {
-//     console.log('Server listening: ' + JSON.stringify(server1.address()));
-//     server1.on('close', function () {
+// server0.listen(3001, function () {
+//     console.log('Server listening: ' + JSON.stringify(server0.address()));
+//     server0.on('close', function () {
 //         console.log('Server Terminated');
 //     });
-//     server1.on('error', function (err) {
+//     server0.on('error', function (err) {
 //         console.log('Server Error: ', JSON.stringify(err));
 //     });
 // });
+
+function makeSensorSocket(port) {
+    const server = net.createServer((client) => {
+        console.log('Client connection: ');
+        console.log('   local = %s:%s', client.localAddress, client.localPort);
+        console.log('   remote = %s:%s', client.remoteAddress, client.remotePort);
+
+        client.setTimeout(500);
+        client.setEncoding('utf8');
+
+        client.on('data', (packet) => {
+            console.log('server 1')
+            console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
+            console.log('  Bytes received: ' + client.bytesRead);
+            const strs = packet.toString().split("\t")
+
+            const date = strs[0]
+            const data = strs[1]
+            console.log(date)
+            console.log(data)
+            console.log('----------------------------------------')
+        });
+
+        client.on('end', () => {
+            console.log('Client disconnected');
+            server.getConnections((err, count) => {
+                console.log('Remaining Connections: ' + count);
+            });
+        });
+
+        client.on('error', (err) => {
+            console.log('Socket Error: ', JSON.stringify(err));
+        });
+
+        client.on('timeout', () => {
+            console.log('Socket Timed out');
+        });
+    });
+
+    server.listen(port, () => {
+        console.log('Server listening: ' + JSON.stringify(server.address()));
+        server.on('close', () => {
+            console.log('Server Terminated');
+        });
+        server.on('error', (err) => {
+            console.log('Server Error: ', JSON.stringify(err));
+        });
+    });
+}
+
+makeSensorSocket(3001)
+makeSensorSocket(3002)
