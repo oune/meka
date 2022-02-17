@@ -48,7 +48,9 @@ var server = net.createServer(function (client) {
         console.log('Received data from client on port %d: %s', client.remotePort, data.toString());
         console.log('  Bytes received: ' + client.bytesRead);
         console.log('----------------------------------------')
-        const { date, num } = data.toString().split("\t")
+        const strs = data.toString().split("\t")
+        const date = strs[0]
+        const num = strs[1]
         console.log(date)
         console.log(num)
     });
