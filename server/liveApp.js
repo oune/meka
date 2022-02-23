@@ -63,7 +63,8 @@ function makeSensorSocket(port) {
 
             dataList[port].push(num)
 
-            console.log(dataList)
+            //log 
+            // console.log(dataList)
 
             // log
             // console.log(`server ${port}`)
