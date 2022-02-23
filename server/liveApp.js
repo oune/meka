@@ -6,6 +6,14 @@ const net = require('net');
 const app = express();
 const httpServer = createServer(app);
 const port = 3000
+const portList = [3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008]
+const dataList = Object()
+
+portList.forEach((portNum) => {
+    dataList[portNum] = []
+});
+
+console.log(dataList)
 
 const io = require("socket.io")(httpServer, {
     cors: {
@@ -51,6 +59,14 @@ function makeSensorSocket(port) {
 
             const date = strs[0]
             const data = strs[1]
+
+            const num = Object()
+            num.date = date
+            num.data = data
+
+            dataList[port].push(num)
+
+            // log
             console.log(date)
             console.log(data)
             console.log('----------------------------------------')
@@ -83,7 +99,6 @@ function makeSensorSocket(port) {
     });
 }
 
-const portList = [3001, 3002]
 portList.forEach((port) => {
     makeSensorSocket(port)
 })
