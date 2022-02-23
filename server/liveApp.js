@@ -52,9 +52,6 @@ function makeSensorSocket(port) {
         client.setEncoding('utf8');
 
         client.on('data', (packet) => {
-            console.log(`server ${port}`)
-            console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
-            console.log('  Bytes received: ' + client.bytesRead);
             const strs = packet.toString().split("\t")
 
             const date = strs[0]
@@ -66,10 +63,15 @@ function makeSensorSocket(port) {
 
             dataList[port].push(num)
 
+            console.log(dataList)
+
             // log
-            console.log(date)
-            console.log(data)
-            console.log('----------------------------------------')
+            // console.log(`server ${port}`)
+            // console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
+            // console.log('  Bytes received: ' + client.bytesRead);
+            // console.log(date)
+            // console.log(data)
+            // console.log('----------------------------------------')
         });
 
         client.on('end', () => {
