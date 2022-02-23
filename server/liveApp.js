@@ -24,10 +24,12 @@ const io = require("socket.io")(httpServer, {
 
 io.on("connection", (socket) => {
     sockets.push(socket)
+
     //log
     console.log(`connection on: ${socket.id}`)
     console.log(`total sockets: ${sockets.length}`)
 });
+
 
 const sockets = []
 httpServer.listen(port, (socket) => {
