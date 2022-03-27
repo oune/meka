@@ -44,13 +44,13 @@ httpServer.listen(port, (socket) => {
 
 const sockets = []
 
-setInterval(() => {
-    sockets.forEach((socket) => {
-        const vide = Math.random() * 2
-        const temp = Math.random() * 30
-        socket.emit("data", { vibe: vide, temp: temp })
-    })
-}, 1000)
+// setInterval(() => {
+//     sockets.forEach((socket) => {
+//         const vide = Math.random() * 2
+//         const temp = Math.random() * 30
+//         socket.emit("data", { vibe: vide, temp: temp })
+//     })
+// }, 1000)
 
 function makeSensorSocket(port) {
     const server = net.createServer((client) => {

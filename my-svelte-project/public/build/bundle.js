@@ -4132,10 +4132,10 @@ var app = (function () {
     			h31.textContent = "온도";
     			t7 = space();
     			create_component(chart1.$$.fragment);
-    			add_location(h2, file$1, 42, 4, 992);
-    			add_location(h30, file$1, 45, 4, 1038);
-    			add_location(h31, file$1, 47, 4, 1116);
-    			add_location(div, file$1, 41, 0, 981);
+    			add_location(h2, file$1, 41, 4, 1002);
+    			add_location(h30, file$1, 44, 4, 1048);
+    			add_location(h31, file$1, 46, 4, 1126);
+    			add_location(div, file$1, 40, 0, 991);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4212,11 +4212,12 @@ var app = (function () {
     	let count = 0;
 
     	socket.on("data", arg => {
-    		const { vibe, temp } = arg;
-    		console.log(arg.data);
-    		chartRefRumble.addDataPoint(".", [vibe]);
-    		charRefTemperature.addDataPoint(".", [temp]);
+    		// const { vibe, temp } = arg;
+    		const { date, data } = arg;
 
+    		chartRefRumble.addDataPoint(date, [data]);
+
+    		// charRefTemperature.addDataPoint(".", [temp]);
     		if (count > 50) {
     			charRefTemperature.removeDataPoint(0);
     			chartRefRumble.removeDataPoint(0);
@@ -4323,22 +4324,22 @@ var app = (function () {
     	let current;
 
     	sensor0 = new Sensor({
-    			props: { sensorNum: "0" },
-    			$$inline: true
-    		});
-
-    	sensor1 = new Sensor({
     			props: { sensorNum: "1" },
     			$$inline: true
     		});
 
-    	sensor2 = new Sensor({
+    	sensor1 = new Sensor({
     			props: { sensorNum: "2" },
     			$$inline: true
     		});
 
-    	sensor3 = new Sensor({
+    	sensor2 = new Sensor({
     			props: { sensorNum: "3" },
+    			$$inline: true
+    		});
+
+    	sensor3 = new Sensor({
+    			props: { sensorNum: "4" },
     			$$inline: true
     		});
 

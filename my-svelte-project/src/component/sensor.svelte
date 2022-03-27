@@ -23,12 +23,11 @@
 
     let count = 0;
     socket.on("data", (arg) => {
-        const { vibe, temp } = arg;
+        // const { vibe, temp } = arg;
+        const { date, data } = arg;
 
-        console.log(arg.data);
-
-        chartRefRumble.addDataPoint(".", [vibe]);
-        charRefTemperature.addDataPoint(".", [temp]);
+        chartRefRumble.addDataPoint(date, [data]);
+        // charRefTemperature.addDataPoint(".", [temp]);
 
         if (count > 50) {
             charRefTemperature.removeDataPoint(0);
