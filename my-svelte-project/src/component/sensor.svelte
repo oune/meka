@@ -3,7 +3,10 @@
     import { io } from "socket.io-client";
     export let sensorNum = 0;
 
-    const socket = io("http://localhost:3000/");
+    const port = Number(sensorNum) + 3000;
+    const url = `http://localhost:3010/`;
+    const socket = io(url);
+
     let data = {
         labels: [],
         datasets: [{ values: [] }],
@@ -13,12 +16,16 @@
         console.log(`sensor connected on id: ${socket.id}`);
     });
 
+    socket.emit("join", port.toString());
+
     let chartRefRumble;
     let charRefTemperature;
 
     let count = 0;
     socket.on("data", (arg) => {
         const { vibe, temp } = arg;
+
+        console.log(arg.data);
 
         chartRefRumble.addDataPoint(".", [vibe]);
         charRefTemperature.addDataPoint(".", [temp]);

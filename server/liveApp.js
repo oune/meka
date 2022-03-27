@@ -5,7 +5,7 @@ const net = require('net');
 
 const app = express();
 const httpServer = createServer(app);
-const port = 3000
+const port = 3010
 const portList = [3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008]
 const dataList = Object()
 
@@ -15,7 +15,7 @@ portList.forEach((portNum) => {
 
 console.log(dataList)
 
-const io = require("socket.io")(httpServer, {
+const io = new Server(httpServer, {
     cors: {
         origin: "http://localhost:5000",
         methods: ["GET", "POST"]
@@ -28,13 +28,21 @@ io.on("connection", (socket) => {
     //log
     console.log(`connection on: ${socket.id}`)
     console.log(`total sockets: ${sockets.length}`)
+
+    socket.on("join", async (data) => {
+        await console.log(`connection on: ${socket.id}`)
+        await console.log(`data : ${data}`)
+
+        socket.join(data)
+    });
 });
+
+httpServer.listen(port, (socket) => {
+    console.log(`app listening at http://localhost:${port}`)
+})
 
 
 const sockets = []
-httpServer.listen(port, (socket) => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
 
 setInterval(() => {
     sockets.forEach((socket) => {
@@ -53,7 +61,7 @@ function makeSensorSocket(port) {
         client.setTimeout(500);
         client.setEncoding('utf8');
 
-        client.on('data', (packet) => {
+        client.on('data', async (packet) => {
             const strs = packet.toString().split("\t")
 
             const date = strs[0]
@@ -65,17 +73,23 @@ function makeSensorSocket(port) {
 
             dataList[port].push(num)
 
-            //log 
-            // console.log(dataList)
-
-            // log
-            // console.log(`server ${port}`)
-            // console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
-            // console.log('  Bytes received: ' + client.bytesRead);
-            // console.log(date)
-            // console.log(data)
-            // console.log('----------------------------------------')
+            const sockets = await io.in(port.toString()).fetchSockets();
+            sockets.forEach(socket => {
+                socket.emit("data", { date: date, data: data })
+            });
         });
+
+        function log() {
+            console.log(dataList)
+
+            log
+            console.log(`server ${port}`)
+            console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
+            console.log('  Bytes received: ' + client.bytesRead);
+            console.log(date)
+            console.log(data)
+            console.log('----------------------------------------')
+        }
 
         client.on('end', () => {
             console.log('Client disconnected');
