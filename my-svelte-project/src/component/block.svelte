@@ -1,6 +1,7 @@
 <script>
-    import Sensor from "./component/Sensor.svelte";
-    export let sensorNum = 0;
+    import Sensor from "./Sensor.svelte";
+
+    export let sensorNum;
     export let vibrationPort;
     export let temperaturePort;
 </script>
@@ -10,7 +11,7 @@
         {sensorNum}번 센서
     </h2>
     <h3>진동</h3>
-    <Sensor port="${vibrationPort}" />
+    <Sensor port={vibrationPort} />
     <h3>온도</h3>
-    <Sensor port="${temperaturePort}" />
+    <Sensor port={temperaturePort} />
 </div>
