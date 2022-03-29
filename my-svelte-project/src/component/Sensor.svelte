@@ -3,13 +3,9 @@
     import { io } from "socket.io-client";
 
     export let port;
-    const url = `http://localhost:${port}/`;
-    const socket = io(url);
 
-    let data = {
-        labels: [],
-        datasets: [{ values: [] }],
-    };
+    const url = `http://localhost:3000`;
+    const socket = io(url);
 
     socket.on("connect", () => {
         console.log(`sensor connected on id: ${socket.id}`);
@@ -17,9 +13,9 @@
 
     socket.emit("join", port.toString());
 
-    let charRef;
-
+    let chartRef;
     let count = 0;
+
     socket.on("data", (arg) => {
         const { date, data } = arg;
 
@@ -31,8 +27,13 @@
             count++;
         }
     });
+
+    let data = {
+        labels: [],
+        datasets: [{ values: [] }],
+    };
 </script>
 
 <div>
-    <Chart {data} type="line" bind:this={charRef} />
+    <Chart {data} type="line" bind:this={chartRef} />
 </div>

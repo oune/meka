@@ -5,7 +5,7 @@ const net = require('net');
 
 const app = express();
 const httpServer = createServer(app);
-const port = 3010
+const port = 3000
 const portList = [3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008]
 const dataList = Object()
 
