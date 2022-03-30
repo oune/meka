@@ -173,6 +173,19 @@ var app = (function () {
     }
     const outroing = new Set();
     let outros;
+    function group_outros() {
+        outros = {
+            r: 0,
+            c: [],
+            p: outros // parent group
+        };
+    }
+    function check_outros() {
+        if (!outros.r) {
+            run_all(outros.c);
+        }
+        outros = outros.p;
+    }
     function transition_in(block, local) {
         if (block && block.i) {
             outroing.delete(block);
@@ -4095,29 +4108,23 @@ var app = (function () {
     const { console: console_1 } = globals;
     const file$2 = "src\\component\\Sensor.svelte";
 
-    function create_fragment$2(ctx) {
-    	let div;
+    // (43:4) {:else}
+    function create_else_block(ctx) {
     	let chart;
     	let current;
-    	let chart_props = { data: /*data*/ ctx[1], type: "line" };
+    	let chart_props = { data: /*data*/ ctx[2], type: "line" };
     	chart = new Base$1({ props: chart_props, $$inline: true });
-    	/*chart_binding*/ ctx[3](chart);
+    	/*chart_binding*/ ctx[4](chart);
 
     	const block = {
     		c: function create() {
-    			div = element("div");
     			create_component(chart.$$.fragment);
-    			add_location(div, file$2, 36, 0, 741);
-    		},
-    		l: function claim(nodes) {
-    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div, anchor);
-    			mount_component(chart, div, null);
+    			mount_component(chart, target, anchor);
     			current = true;
     		},
-    		p: function update(ctx, [dirty]) {
+    		p: function update(ctx, dirty) {
     			const chart_changes = {};
     			chart.$set(chart_changes);
     		},
@@ -4131,9 +4138,123 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
+    			/*chart_binding*/ ctx[4](null);
+    			destroy_component(chart, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block.name,
+    		type: "else",
+    		source: "(43:4) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (41:4) {#if isEmpty}
+    function create_if_block(ctx) {
+    	let p;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			p.textContent = "수신한 데이터가 없습니다.";
+    			add_location(p, file$2, 41, 8, 856);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    		},
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(41:4) {#if isEmpty}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$2(ctx) {
+    	let div;
+    	let current_block_type_index;
+    	let if_block;
+    	let current;
+    	const if_block_creators = [create_if_block, create_else_block];
+    	const if_blocks = [];
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*isEmpty*/ ctx[1]) return 0;
+    		return 1;
+    	}
+
+    	current_block_type_index = select_block_type(ctx);
+    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			if_block.c();
+    			add_location(div, file$2, 39, 0, 822);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			if_blocks[current_block_type_index].m(div, null);
+    			current = true;
+    		},
+    		p: function update(ctx, [dirty]) {
+    			let previous_block_index = current_block_type_index;
+    			current_block_type_index = select_block_type(ctx);
+
+    			if (current_block_type_index === previous_block_index) {
+    				if_blocks[current_block_type_index].p(ctx, dirty);
+    			} else {
+    				group_outros();
+
+    				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    					if_blocks[previous_block_index] = null;
+    				});
+
+    				check_outros();
+    				if_block = if_blocks[current_block_type_index];
+
+    				if (!if_block) {
+    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block.c();
+    				} else {
+    					if_block.p(ctx, dirty);
+    				}
+
+    				transition_in(if_block, 1);
+    				if_block.m(div, null);
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
-    			/*chart_binding*/ ctx[3](null);
-    			destroy_component(chart);
+    			if_blocks[current_block_type_index].d();
     		}
     	};
 
@@ -4162,13 +4283,16 @@ var app = (function () {
     	socket.emit("join", port.toString());
     	let chartRef;
     	let count = 0;
+    	let isEmpty = true;
 
     	socket.on("data", arg => {
     		const { date, data } = arg;
+    		$$invalidate(1, isEmpty = false);
     		chartRef.addDataPoint(date, [data]);
+    		console.log(count);
 
     		if (count > 50) {
-    			charRef.removeDataPoint(0);
+    			chartRef.removeDataPoint(0);
     		} else {
     			count++;
     		}
@@ -4189,7 +4313,7 @@ var app = (function () {
     	}
 
     	$$self.$$set = $$props => {
-    		if ('port' in $$props) $$invalidate(2, port = $$props.port);
+    		if ('port' in $$props) $$invalidate(3, port = $$props.port);
     	};
 
     	$$self.$capture_state = () => ({
@@ -4200,27 +4324,29 @@ var app = (function () {
     		socket,
     		chartRef,
     		count,
+    		isEmpty,
     		data
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('port' in $$props) $$invalidate(2, port = $$props.port);
+    		if ('port' in $$props) $$invalidate(3, port = $$props.port);
     		if ('chartRef' in $$props) $$invalidate(0, chartRef = $$props.chartRef);
     		if ('count' in $$props) count = $$props.count;
-    		if ('data' in $$props) $$invalidate(1, data = $$props.data);
+    		if ('isEmpty' in $$props) $$invalidate(1, isEmpty = $$props.isEmpty);
+    		if ('data' in $$props) $$invalidate(2, data = $$props.data);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [chartRef, data, port, chart_binding];
+    	return [chartRef, isEmpty, data, port, chart_binding];
     }
 
     class Sensor extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$2, create_fragment$2, safe_not_equal, { port: 2 });
+    		init(this, options, instance$2, create_fragment$2, safe_not_equal, { port: 3 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -4232,7 +4358,7 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*port*/ ctx[2] === undefined && !('port' in props)) {
+    		if (/*port*/ ctx[3] === undefined && !('port' in props)) {
     			console_1.warn("<Sensor> was created without expected prop 'port'");
     		}
     	}

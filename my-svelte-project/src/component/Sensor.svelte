@@ -15,14 +15,17 @@
 
     let chartRef;
     let count = 0;
+    let isEmpty = true;
 
     socket.on("data", (arg) => {
         const { date, data } = arg;
+        isEmpty = false;
 
         chartRef.addDataPoint(date, [data]);
+        console.log(count);
 
         if (count > 50) {
-            charRef.removeDataPoint(0);
+            chartRef.removeDataPoint(0);
         } else {
             count++;
         }
@@ -35,5 +38,9 @@
 </script>
 
 <div>
-    <Chart {data} type="line" bind:this={chartRef} />
+    {#if isEmpty}
+        <p>수신한 데이터가 없습니다.</p>
+    {:else}
+        <Chart {data} type="line" bind:this={chartRef} />
+    {/if}
 </div>
