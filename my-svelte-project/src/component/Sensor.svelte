@@ -45,7 +45,7 @@
 </script>
 
 <form>
-    <select bind:value={selected} on:change={handleChange}>
+    <select bind:value={selected}>
         {#each options as option}
             <option value={option}>
                 {option.text}

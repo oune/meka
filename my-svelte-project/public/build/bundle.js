@@ -4160,7 +4160,7 @@ var app = (function () {
     			t1 = space();
     			option.__value = /*option*/ ctx[11];
     			option.value = option.__value;
-    			add_location(option, file$2, 49, 12, 1096);
+    			add_location(option, file$2, 49, 12, 1071);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -4238,7 +4238,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "수신한 데이터가 없습니다.";
-    			add_location(p, file$2, 57, 4, 1237);
+    			add_location(p, file$2, 57, 4, 1212);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -4325,11 +4325,7 @@ var app = (function () {
     			current = true;
 
     			if (!mounted) {
-    				dispose = [
-    					listen_dev(select, "change", /*select_change_handler*/ ctx[6]),
-    					listen_dev(select, "change", handleChange, false, false, false)
-    				];
-
+    				dispose = listen_dev(select, "change", /*select_change_handler*/ ctx[6]);
     				mounted = true;
     			}
     		},
@@ -4404,7 +4400,7 @@ var app = (function () {
     			if_blocks[current_block_type_index].d(detaching);
     			if (detaching) detach_dev(if_block_anchor);
     			mounted = false;
-    			run_all(dispose);
+    			dispose();
     		}
     	};
 
@@ -4574,8 +4570,8 @@ var app = (function () {
     			t1 = text("번 센서");
     			t2 = space();
     			create_component(sensor.$$.fragment);
-    			add_location(h2, file$1, 9, 4, 170);
-    			add_location(div, file$1, 8, 0, 159);
+    			add_location(h2, file$1, 8, 4, 137);
+    			add_location(div, file$1, 7, 0, 126);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4626,8 +4622,7 @@ var app = (function () {
     	validate_slots('Block', slots, []);
     	let { sensorNum } = $$props;
     	let { vibrationPort } = $$props;
-    	let { temperaturePort } = $$props;
-    	const writable_props = ['sensorNum', 'vibrationPort', 'temperaturePort'];
+    	const writable_props = ['sensorNum', 'vibrationPort'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Block> was created with unknown prop '${key}'`);
@@ -4636,38 +4631,26 @@ var app = (function () {
     	$$self.$$set = $$props => {
     		if ('sensorNum' in $$props) $$invalidate(0, sensorNum = $$props.sensorNum);
     		if ('vibrationPort' in $$props) $$invalidate(1, vibrationPort = $$props.vibrationPort);
-    		if ('temperaturePort' in $$props) $$invalidate(2, temperaturePort = $$props.temperaturePort);
     	};
 
-    	$$self.$capture_state = () => ({
-    		Sensor,
-    		sensorNum,
-    		vibrationPort,
-    		temperaturePort
-    	});
+    	$$self.$capture_state = () => ({ Sensor, sensorNum, vibrationPort });
 
     	$$self.$inject_state = $$props => {
     		if ('sensorNum' in $$props) $$invalidate(0, sensorNum = $$props.sensorNum);
     		if ('vibrationPort' in $$props) $$invalidate(1, vibrationPort = $$props.vibrationPort);
-    		if ('temperaturePort' in $$props) $$invalidate(2, temperaturePort = $$props.temperaturePort);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [sensorNum, vibrationPort, temperaturePort];
+    	return [sensorNum, vibrationPort];
     }
 
     class Block extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {
-    			sensorNum: 0,
-    			vibrationPort: 1,
-    			temperaturePort: 2
-    		});
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { sensorNum: 0, vibrationPort: 1 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -4686,10 +4669,6 @@ var app = (function () {
     		if (/*vibrationPort*/ ctx[1] === undefined && !('vibrationPort' in props)) {
     			console.warn("<Block> was created without expected prop 'vibrationPort'");
     		}
-
-    		if (/*temperaturePort*/ ctx[2] === undefined && !('temperaturePort' in props)) {
-    			console.warn("<Block> was created without expected prop 'temperaturePort'");
-    		}
     	}
 
     	get sensorNum() {
@@ -4705,14 +4684,6 @@ var app = (function () {
     	}
 
     	set vibrationPort(value) {
-    		throw new Error("<Block>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	get temperaturePort() {
-    		throw new Error("<Block>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	set temperaturePort(value) {
     		throw new Error("<Block>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -4735,38 +4706,22 @@ var app = (function () {
     	let current;
 
     	block0 = new Block({
-    			props: {
-    				sensorNum: "1",
-    				vibrationPort: "3001",
-    				temperaturePort: "3005"
-    			},
+    			props: { sensorNum: "1", vibrationPort: "3001" },
     			$$inline: true
     		});
 
     	block1 = new Block({
-    			props: {
-    				sensorNum: "2",
-    				vibrationPort: "3002",
-    				temperaturePort: "3006"
-    			},
+    			props: { sensorNum: "2", vibrationPort: "3002" },
     			$$inline: true
     		});
 
     	block2 = new Block({
-    			props: {
-    				sensorNum: "3",
-    				vibrationPort: "3003",
-    				temperaturePort: "3007"
-    			},
+    			props: { sensorNum: "3", vibrationPort: "3003" },
     			$$inline: true
     		});
 
     	block3 = new Block({
-    			props: {
-    				sensorNum: "4",
-    				vibrationPort: "3004",
-    				temperaturePort: "3008"
-    			},
+    			props: { sensorNum: "4", vibrationPort: "3004" },
     			$$inline: true
     		});
 
