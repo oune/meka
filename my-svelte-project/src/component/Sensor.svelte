@@ -35,12 +35,27 @@
         labels: [],
         datasets: [{ values: [] }],
     };
+
+    let selected;
+    let options = [
+        { id: 1, text: `온도센서` },
+        { id: 2, text: `모터 진동센서` },
+        { id: 3, text: `펌프 진동센서` },
+    ];
 </script>
 
-<div>
-    {#if isEmpty}
-        <p>수신한 데이터가 없습니다.</p>
-    {:else}
-        <Chart {data} type="line" bind:this={chartRef} />
-    {/if}
-</div>
+<form>
+    <select bind:value={selected} on:change={handleChange}>
+        {#each options as option}
+            <option value={option}>
+                {option.text}
+            </option>
+        {/each}
+    </select>
+</form>
+
+{#if isEmpty}
+    <p>수신한 데이터가 없습니다.</p>
+{:else}
+    <Chart {data} type="line" bind:this={chartRef} />
+{/if}

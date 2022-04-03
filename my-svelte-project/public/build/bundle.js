@@ -36,6 +36,12 @@ var app = (function () {
     function detach(node) {
         node.parentNode.removeChild(node);
     }
+    function destroy_each(iterations, detaching) {
+        for (let i = 0; i < iterations.length; i += 1) {
+            if (iterations[i])
+                iterations[i].d(detaching);
+        }
+    }
     function element(name) {
         return document.createElement(name);
     }
@@ -44,6 +50,9 @@ var app = (function () {
     }
     function space() {
         return text(' ');
+    }
+    function empty$1() {
+        return text('');
     }
     function listen(node, event, handler, options) {
         node.addEventListener(event, handler, options);
@@ -57,6 +66,20 @@ var app = (function () {
     }
     function children(element) {
         return Array.from(element.childNodes);
+    }
+    function select_option(select, value) {
+        for (let i = 0; i < select.options.length; i += 1) {
+            const option = select.options[i];
+            if (option.__value === value) {
+                option.selected = true;
+                return;
+            }
+        }
+        select.selectedIndex = -1; // no option should be selected
+    }
+    function select_value(select) {
+        const selected_option = select.querySelector(':checked') || select.options[0];
+        return selected_option && selected_option.__value;
     }
     function custom_event(type, detail, bubbles = false) {
         const e = document.createEvent('CustomEvent');
@@ -384,6 +407,15 @@ var app = (function () {
             return;
         dispatch_dev('SvelteDOMSetData', { node: text, data });
         text.data = data;
+    }
+    function validate_each_argument(arg) {
+        if (typeof arg !== 'string' && !(arg && typeof arg === 'object' && 'length' in arg)) {
+            let msg = '{#each} only iterates over array-like objects.';
+            if (typeof Symbol === 'function' && arg && Symbol.iterator in arg) {
+                msg += ' You can use a spread to convert this iterable into an array.';
+            }
+            throw new Error(msg);
+        }
     }
     function validate_slots(name, slot, keys) {
         for (const slot_key of Object.keys(slot)) {
@@ -4108,13 +4140,57 @@ var app = (function () {
     const { console: console_1 } = globals;
     const file$2 = "src\\component\\Sensor.svelte";
 
-    // (43:4) {:else}
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[11] = list[i];
+    	return child_ctx;
+    }
+
+    // (49:8) {#each options as option}
+    function create_each_block(ctx) {
+    	let option;
+    	let t0_value = /*option*/ ctx[11].text + "";
+    	let t0;
+    	let t1;
+
+    	const block = {
+    		c: function create() {
+    			option = element("option");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			option.__value = /*option*/ ctx[11];
+    			option.value = option.__value;
+    			add_location(option, file$2, 49, 12, 1096);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, option, anchor);
+    			append_dev(option, t0);
+    			append_dev(option, t1);
+    		},
+    		p: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(option);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block.name,
+    		type: "each",
+    		source: "(49:8) {#each options as option}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (59:0) {:else}
     function create_else_block(ctx) {
     	let chart;
     	let current;
-    	let chart_props = { data: /*data*/ ctx[2], type: "line" };
+    	let chart_props = { data: /*data*/ ctx[3], type: "line" };
     	chart = new Base$1({ props: chart_props, $$inline: true });
-    	/*chart_binding*/ ctx[4](chart);
+    	/*chart_binding*/ ctx[7](chart);
 
     	const block = {
     		c: function create() {
@@ -4138,7 +4214,7 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			/*chart_binding*/ ctx[4](null);
+    			/*chart_binding*/ ctx[7](null);
     			destroy_component(chart, detaching);
     		}
     	};
@@ -4147,14 +4223,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(43:4) {:else}",
+    		source: "(59:0) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (41:4) {#if isEmpty}
+    // (57:0) {#if isEmpty}
     function create_if_block(ctx) {
     	let p;
 
@@ -4162,7 +4238,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "수신한 데이터가 없습니다.";
-    			add_location(p, file$2, 41, 8, 856);
+    			add_location(p, file$2, 57, 4, 1237);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -4179,7 +4255,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(41:4) {#if isEmpty}",
+    		source: "(57:0) {#if isEmpty}",
     		ctx
     	});
 
@@ -4187,10 +4263,23 @@ var app = (function () {
     }
 
     function create_fragment$2(ctx) {
-    	let div;
+    	let form;
+    	let select;
+    	let t;
     	let current_block_type_index;
     	let if_block;
+    	let if_block_anchor;
     	let current;
+    	let mounted;
+    	let dispose;
+    	let each_value = /*options*/ ctx[4];
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	}
+
     	const if_block_creators = [create_if_block, create_else_block];
     	const if_blocks = [];
 
@@ -4204,19 +4293,75 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
-    			div = element("div");
+    			form = element("form");
+    			select = element("select");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			t = space();
     			if_block.c();
-    			add_location(div, file$2, 39, 0, 822);
+    			if_block_anchor = empty$1();
+    			if (/*selected*/ ctx[2] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[6].call(select));
+    			add_location(select, file$2, 47, 4, 992);
+    			add_location(form, file$2, 46, 0, 980);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div, anchor);
-    			if_blocks[current_block_type_index].m(div, null);
+    			insert_dev(target, form, anchor);
+    			append_dev(form, select);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(select, null);
+    			}
+
+    			select_option(select, /*selected*/ ctx[2]);
+    			insert_dev(target, t, anchor);
+    			if_blocks[current_block_type_index].m(target, anchor);
+    			insert_dev(target, if_block_anchor, anchor);
     			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen_dev(select, "change", /*select_change_handler*/ ctx[6]),
+    					listen_dev(select, "change", handleChange, false, false, false)
+    				];
+
+    				mounted = true;
+    			}
     		},
     		p: function update(ctx, [dirty]) {
+    			if (dirty & /*options*/ 16) {
+    				each_value = /*options*/ ctx[4];
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(select, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+
+    			if (dirty & /*selected, options*/ 20) {
+    				select_option(select, /*selected*/ ctx[2]);
+    			}
+
     			let previous_block_index = current_block_type_index;
     			current_block_type_index = select_block_type(ctx);
 
@@ -4240,7 +4385,7 @@ var app = (function () {
     				}
 
     				transition_in(if_block, 1);
-    				if_block.m(div, null);
+    				if_block.m(if_block_anchor.parentNode, if_block_anchor);
     			}
     		},
     		i: function intro(local) {
@@ -4253,8 +4398,13 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div);
-    			if_blocks[current_block_type_index].d();
+    			if (detaching) detach_dev(form);
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach_dev(t);
+    			if_blocks[current_block_type_index].d(detaching);
+    			if (detaching) detach_dev(if_block_anchor);
+    			mounted = false;
+    			run_all(dispose);
     		}
     	};
 
@@ -4299,11 +4449,25 @@ var app = (function () {
     	});
 
     	let data = { labels: [], datasets: [{ values: [] }] };
+    	let selected;
+
+    	let options = [
+    		{ id: 1, text: `온도센서` },
+    		{ id: 2, text: `모터 진동센서` },
+    		{ id: 3, text: `펌프 진동센서` }
+    	];
+
     	const writable_props = ['port'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<Sensor> was created with unknown prop '${key}'`);
     	});
+
+    	function select_change_handler() {
+    		selected = select_value(this);
+    		$$invalidate(2, selected);
+    		$$invalidate(4, options);
+    	}
 
     	function chart_binding($$value) {
     		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
@@ -4313,7 +4477,7 @@ var app = (function () {
     	}
 
     	$$self.$$set = $$props => {
-    		if ('port' in $$props) $$invalidate(3, port = $$props.port);
+    		if ('port' in $$props) $$invalidate(5, port = $$props.port);
     	};
 
     	$$self.$capture_state = () => ({
@@ -4325,28 +4489,41 @@ var app = (function () {
     		chartRef,
     		count,
     		isEmpty,
-    		data
+    		data,
+    		selected,
+    		options
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('port' in $$props) $$invalidate(3, port = $$props.port);
+    		if ('port' in $$props) $$invalidate(5, port = $$props.port);
     		if ('chartRef' in $$props) $$invalidate(0, chartRef = $$props.chartRef);
     		if ('count' in $$props) count = $$props.count;
     		if ('isEmpty' in $$props) $$invalidate(1, isEmpty = $$props.isEmpty);
-    		if ('data' in $$props) $$invalidate(2, data = $$props.data);
+    		if ('data' in $$props) $$invalidate(3, data = $$props.data);
+    		if ('selected' in $$props) $$invalidate(2, selected = $$props.selected);
+    		if ('options' in $$props) $$invalidate(4, options = $$props.options);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [chartRef, isEmpty, data, port, chart_binding];
+    	return [
+    		chartRef,
+    		isEmpty,
+    		selected,
+    		data,
+    		options,
+    		port,
+    		select_change_handler,
+    		chart_binding
+    	];
     }
 
     class Sensor extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$2, create_fragment$2, safe_not_equal, { port: 3 });
+    		init(this, options, instance$2, create_fragment$2, safe_not_equal, { port: 5 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -4358,7 +4535,7 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*port*/ ctx[3] === undefined && !('port' in props)) {
+    		if (/*port*/ ctx[5] === undefined && !('port' in props)) {
     			console_1.warn("<Sensor> was created without expected prop 'port'");
     		}
     	}
@@ -4381,22 +4558,11 @@ var app = (function () {
     	let t0;
     	let t1;
     	let t2;
-    	let h30;
-    	let t4;
-    	let sensor0;
-    	let t5;
-    	let h31;
-    	let t7;
-    	let sensor1;
+    	let sensor;
     	let current;
 
-    	sensor0 = new Sensor({
+    	sensor = new Sensor({
     			props: { port: /*vibrationPort*/ ctx[1] },
-    			$$inline: true
-    		});
-
-    	sensor1 = new Sensor({
-    			props: { port: /*temperaturePort*/ ctx[2] },
     			$$inline: true
     		});
 
@@ -4407,18 +4573,8 @@ var app = (function () {
     			t0 = text(/*sensorNum*/ ctx[0]);
     			t1 = text("번 센서");
     			t2 = space();
-    			h30 = element("h3");
-    			h30.textContent = "진동";
-    			t4 = space();
-    			create_component(sensor0.$$.fragment);
-    			t5 = space();
-    			h31 = element("h3");
-    			h31.textContent = "온도";
-    			t7 = space();
-    			create_component(sensor1.$$.fragment);
+    			create_component(sensor.$$.fragment);
     			add_location(h2, file$1, 9, 4, 170);
-    			add_location(h30, file$1, 12, 4, 216);
-    			add_location(h31, file$1, 14, 4, 270);
     			add_location(div, file$1, 8, 0, 159);
     		},
     		l: function claim(nodes) {
@@ -4430,39 +4586,27 @@ var app = (function () {
     			append_dev(h2, t0);
     			append_dev(h2, t1);
     			append_dev(div, t2);
-    			append_dev(div, h30);
-    			append_dev(div, t4);
-    			mount_component(sensor0, div, null);
-    			append_dev(div, t5);
-    			append_dev(div, h31);
-    			append_dev(div, t7);
-    			mount_component(sensor1, div, null);
+    			mount_component(sensor, div, null);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
     			if (!current || dirty & /*sensorNum*/ 1) set_data_dev(t0, /*sensorNum*/ ctx[0]);
-    			const sensor0_changes = {};
-    			if (dirty & /*vibrationPort*/ 2) sensor0_changes.port = /*vibrationPort*/ ctx[1];
-    			sensor0.$set(sensor0_changes);
-    			const sensor1_changes = {};
-    			if (dirty & /*temperaturePort*/ 4) sensor1_changes.port = /*temperaturePort*/ ctx[2];
-    			sensor1.$set(sensor1_changes);
+    			const sensor_changes = {};
+    			if (dirty & /*vibrationPort*/ 2) sensor_changes.port = /*vibrationPort*/ ctx[1];
+    			sensor.$set(sensor_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(sensor0.$$.fragment, local);
-    			transition_in(sensor1.$$.fragment, local);
+    			transition_in(sensor.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(sensor0.$$.fragment, local);
-    			transition_out(sensor1.$$.fragment, local);
+    			transition_out(sensor.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
-    			destroy_component(sensor0);
-    			destroy_component(sensor1);
+    			destroy_component(sensor);
     		}
     	};
 
@@ -4577,6 +4721,7 @@ var app = (function () {
     const file = "src\\App.svelte";
 
     function create_fragment(ctx) {
+    	let body;
     	let h1;
     	let t1;
     	let div;
@@ -4627,6 +4772,7 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
+    			body = element("body");
     			h1 = element("h1");
     			h1.textContent = "고장 진단 시스템";
     			t1 = space();
@@ -4638,17 +4784,19 @@ var app = (function () {
     			create_component(block2.$$.fragment);
     			t4 = space();
     			create_component(block3.$$.fragment);
-    			add_location(h1, file, 4, 0, 70);
+    			add_location(h1, file, 5, 4, 81);
     			attr_dev(div, "class", "sensorContainer svelte-fm9ez9");
-    			add_location(div, file, 5, 0, 89);
+    			add_location(div, file, 6, 4, 104);
+    			add_location(body, file, 4, 0, 70);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, h1, anchor);
-    			insert_dev(target, t1, anchor);
-    			insert_dev(target, div, anchor);
+    			insert_dev(target, body, anchor);
+    			append_dev(body, h1);
+    			append_dev(body, t1);
+    			append_dev(body, div);
     			mount_component(block0, div, null);
     			append_dev(div, t2);
     			mount_component(block1, div, null);
@@ -4675,9 +4823,7 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(h1);
-    			if (detaching) detach_dev(t1);
-    			if (detaching) detach_dev(div);
+    			if (detaching) detach_dev(body);
     			destroy_component(block0);
     			destroy_component(block1);
     			destroy_component(block2);
