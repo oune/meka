@@ -11,7 +11,6 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 import pickle
 import joblib
-
 import scipy
 import scipy.stats
 from numpy import mean, square, sqrt
@@ -25,212 +24,177 @@ import math as m
 from time import time
 
 
-def extract_feature(Hss):
-    s, size = Hss.shape
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = np.mean(Hss[:, i])  # compute mean for each signal
-        a.append(x)  # store the value to empty array
-
-    Mean_H = np.array(a)  # convert list to array
-    Mean_H.shape
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = np.max(Hss[:, i])  # compute max for each signal
-        a.append(x)  # store the value to empty array
-
-    MAX_H = np.array(a)  # convert list to array
-    MAX_H.shape
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = np.min(Hss[:, i])  # compute min for each signal
-        a.append(x)  # store the value to empty array
-
-    MIN_H = np.array(a)  # convert list to array
-    MIN_H.shape
-
-    from numpy import sqrt, mean, square
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = sqrt(mean(square(Hss[:, i])))  # compute rms for each signal
-        a.append(x)  # store the value to empty array
-
-    RMS_H = np.array(a)  # convert list to array
-    RMS_H.shape
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = np.std(Hss[:, i])  # compute standard deviation(표준편차) for each signal
-        a.append(x)  # store the value to empty array
-
-    STD_H = np.array(a)  # convert list to array
-    STD_H.shape
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = np.var(Hss[:, i])  # compute Variance for each signal
-        a.append(x)  # store the value to empty array
-
-    VAR_H = np.array(a)  # convert list to array
-    VAR_H.shape
-
-    from scipy.stats import kurtosis
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = kurtosis(Hss[:, i])  # compute Kurtosis for each signal
-        a.append(x)  # store the value to empty array
-
-    KUR_H = np.array(a)  # convert list to array
-    KUR_H.shape
-
-    from scipy.stats import skew
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = skew(Hss[:, i])  # compute Skewness for each signal
-        a.append(x)  # store the value to empty array
-
-    SKEW_H = np.array(a)  # convert list to array
-    SKEW_H.shape
-
-    from scipy.stats import gstd
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = gstd(abs(Hss[:, i]))  # compute GSTD for each signal
-        a.append(x)  # store the value to empty array
-
-    GSTD_H = np.array(a)  # convert list to array
-    GSTD_H.shape
-
-    from scipy.stats import iqr
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = iqr(Hss[:, i])  # compute IQR for each signal
-        a.append(x)  # store the value to empty array
-
-    IQR_H = np.array(a)  # convert list to array
-    IQR_H.shape
-
-    from scipy.stats import sem
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = sem(Hss[:, i])  # compute SEM for each signal
-        a.append(x)  # store the value to empty array
-
-    SEM_H = np.array(a)  # convert list to array
-    SEM_H.shape
-
-    # from scipy.stats import median_abs_deviation
-
-    # a = [] #create an empty list
-
-    # for i in range(size):  #run a loop to compute every signal in the variable
-    #    x = median_abs_deviation(Hss[:, i])  #compute MAD for each signal
-    #    a.append(x)  #store the value to empty array
-
-    # MAD_H = np.array(a) #convert list to array
-    # MAD_H.shape
-
-    a = []  # create an empty list
-
-    for i in range(size):  # run a loop to compute every signal in the variable
-        x = max(Hss[:, i]) / RMS_H[i]  # compute Crest Factor for each signal
-        a.append(x)  # store the value to empty array
-
-    CF_H = np.array(a)  # convert list to array
-    CF_H.shape
-
-    Motor_FT = pd.DataFrame([Mean_H, RMS_H, VAR_H, STD_H,
-                             GSTD_H, IQR_H, SEM_H, MAX_H, MIN_H,
-                             KUR_H, SKEW_H, CF_H]).T
-
-    names = ['Mean', 'RMS', 'VAR', 'STD', 'GSTD',
-             'IQR', 'SEM', 'MAX_H', 'MIN_H',
-             'KUR', 'SKEW', 'CF']
-    Motor_FT.columns = names
-    # Motor_FT['State'] = 0
-
-    return Motor_FT
-
-
-def feature_process(data_frame, batch_size=5110):
-    columns = ['Mean', 'RMS', 'VAR', 'STD', 'GSTD', 'IQR', 'SEM', 'MAX_H', 'MIN_H', 'KUR', 'SKEW']
-    before = 0
-    train_data = pd.DataFrame(np.zeros((1, 11)), columns=columns)
-    for i in tqdm(range(batch_size, len(data_frame), batch_size)):
-        features = extract_feature(data_frame[before:i].to_numpy().reshape(-1, 1))
-        before = i
-        train_data = train_data.append(features, ignore_index=True)
-
-    return train_data[1:]
-
-
-def get_anomaly_scores(clf, data):
-    return clf.decision_function(data).reshape(-1, 1)
-
-
-def get_abnormal_data(df):
-    vib1_abnormal_random = []
-    max_value = max(df)
-    min_value = min(df)
-    value = max(abs(max_value), abs(min_value))
-    for i in tqdm(range(0, len(df))):
-        a = random.uniform(0, value * 0.25)
-        if df[i] > 0:
-            vib1_abnormal_random.append(df[i] + a)
-        elif df[i] < -0:
-            vib1_abnormal_random.append(df[i] - a)
-    return pd.DataFrame(vib1_abnormal_random,
-                        columns=['x1'])
-
-
-def collection(filepath):
+class Model:
     columns = ['Mean', 'RMS', 'VAR', 'STD', 'GSTD', 'IQR', 'SEM', 'MAX_H', 'MIN_H', 'KUR', 'SKEW', 'CF']
-    df = pd.DataFrame(np.zeros((1, 12)), columns=columns)
-    for i, file1 in enumerate(filepath):
-        vib1 = pd.read_csv(file1, sep='\t', names=['time', 'data'],
-                           header=None, encoding='CP949').iloc[:47962461, 1]
 
-        vib1_features = feature_process(vib1)
-        df = df.append(pd.DataFrame(vib1_features, columns=columns))
+    def __init__(self, value, is_init):
+        if is_init is True:
+            self.__clf = LocalOutlierFactor(n_neighbors=value, novelty=True)
+        else:
+            self.__clf = joblib.load(value)
 
-    return df
+    def save_model(self, filepath):
+        if self.__clf is not None:
+            joblib.dump(self.__clf, filepath)
 
+    @classmethod
+    def load_model(cls, filepath):
+        return cls(filepath, False)
 
-clf = LocalOutlierFactor(n_neighbors=1000,novelty=True)
-clf.fit(X_train)
+    @classmethod
+    def init_model(cls, n_neighbors=1000):
+        return cls(n_neighbors, True)
 
-plt.rcParams.update(plt.rcParamsDefault)
-plt.style.use('seaborn-notebook')
+    def __extract_feature(self, Hss):
 
+        s, size = Hss.shape
 
-X_valid = pd.read_csv('03_30/VIB_0330_motor_51200.csv', sep = '\t',
-                     names = ['time', 'data'], header = None, encoding = 'CP949').iloc[:47962461,1]
-X_abnormal = get_abnormal_data(X_valid)
-X_valid = feature_process(X_valid)
+        a = []  # create an empty list
 
-anomaly_scores = clf.predict(X_valid)
-anomaly_scores = pd.DataFrame(anomaly_scores.reshape(-1) ,columns=['x1'])
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = np.mean(Hss[:, i])  # compute mean for each signal
+            a.append(x)  # store the value to empty array
 
-X_abnormal = feature_process(X_abnormal)
-outliers = clf.predict(X_abnormal)
-outliers = pd.DataFrame(outliers.reshape(-1) ,columns=['x1'])
+        Mean_H = np.array(a)  # convert list to array
+        Mean_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = np.max(Hss[:, i])  # compute max for each signal
+            a.append(x)  # store the value to empty array
+
+        MAX_H = np.array(a)  # convert list to array
+        MAX_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = np.min(Hss[:, i])  # compute min for each signal
+            a.append(x)  # store the value to empty array
+
+        MIN_H = np.array(a)  # convert list to array
+        MIN_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = sqrt(mean(square(Hss[:, i])))  # compute rms for each signal
+            a.append(x)  # store the value to empty array
+
+        RMS_H = np.array(a)  # convert list to array
+        RMS_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = np.std(Hss[:, i])  # compute standard deviation(표준편차) for each signal
+            a.append(x)  # store the value to empty array
+
+        STD_H = np.array(a)  # convert list to array
+        STD_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = np.var(Hss[:, i])  # compute Variance for each signal
+            a.append(x)  # store the value to empty array
+
+        VAR_H = np.array(a)  # convert list to array
+        VAR_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = kurtosis(Hss[:, i])  # compute Kurtosis for each signal
+            a.append(x)  # store the value to empty array
+
+        KUR_H = np.array(a)  # convert list to array
+        KUR_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = skew(Hss[:, i])  # compute Skewness for each signal
+            a.append(x)  # store the value to empty array
+
+        SKEW_H = np.array(a)  # convert list to array
+        SKEW_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = gstd(abs(Hss[:, i]))  # compute GSTD for each signal
+            a.append(x)  # store the value to empty array
+
+        GSTD_H = np.array(a)  # convert list to array
+        GSTD_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = iqr(Hss[:, i])  # compute IQR for each signal
+            a.append(x)  # store the value to empty array
+
+        IQR_H = np.array(a)  # convert list to array
+        IQR_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = sem(Hss[:, i])  # compute SEM for each signal
+            a.append(x)  # store the value to empty array
+
+        SEM_H = np.array(a)  # convert list to array
+        SEM_H.shape
+
+        # from scipy.stats import median_abs_deviation
+
+        # a = [] #create an empty list
+
+        # for i in range(size):  #run a loop to compute every signal in the variable
+        #    x = median_abs_deviation(Hss[:, i])  #compute MAD for each signal
+        #    a.append(x)  #store the value to empty array
+
+        # MAD_H = np.array(a) #convert list to array
+        # MAD_H.shape
+
+        a = []  # create an empty list
+
+        for i in range(size):  # run a loop to compute every signal in the variable
+            x = max(Hss[:, i]) / RMS_H[i]  # compute Crest Factor for each signal
+            a.append(x)  # store the value to empty array
+
+        CF_H = np.array(a)  # convert list to array
+        CF_H.shape
+
+        Motor_FT = pd.DataFrame([Mean_H, RMS_H, VAR_H, STD_H,
+                                 GSTD_H, IQR_H, SEM_H, MAX_H, MIN_H,
+                                 KUR_H, SKEW_H, CF_H]).T
+
+        Motor_FT.columns = Model.columns
+        # Motor_FT['State'] = 0
+
+        return Motor_FT
+
+    def __feature_process(self, data_frame, batch_size=5110):
+        before = 0
+        train_data = pd.DataFrame(np.zeros((1, 12)), columns=Model.columns)
+
+        if len(data_frame) <= batch_size:
+            features = extract_feature(data_frame.to_numpy().reshape(-1, 1))
+            return features
+
+        for i in tqdm(range(batch, len(data_frame), batch)):
+            features = extract_feature(data_frame[before:i].to_numpy().reshape(-1, 1))
+            before = i
+            train_data = train_data.append(features, ignore_index=True)
+
+        return train_data[1:]
+
+    def predict(self, data_frame):
+        df = self.__feature_process(data_frame)
+        return self.__clf.predict(df)
+
+    def training(self, data_frame):
+        self.__clf.fit(data_frame)
