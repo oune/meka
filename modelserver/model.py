@@ -1,27 +1,13 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn import preprocessing
 import numpy as np
-from sklearn.ensemble import IsolationForest
 from sklearn.neighbors import LocalOutlierFactor
 from tqdm import tqdm
-from sklearn.model_selection import train_test_split
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-import pickle
 import joblib
-import scipy
-import scipy.stats
 from numpy import mean, square, sqrt
-from scipy.stats import kurtosis
+from scipy.stats import kurtosis, gstd
 from scipy.stats import skew
-from collections import Counter
-from scipy.stats import kurtosis
-from scipy.stats import skew
-import random
-import math as m
-from time import time
+from scipy.stats import sem
+from scipy.stats import iqr
 
 
 class Model:
@@ -142,6 +128,7 @@ class Model:
         a = []  # create an empty list
 
         for i in range(size):  # run a loop to compute every signal in the variable
+
             x = sem(Hss[:, i])  # compute SEM for each signal
             a.append(x)  # store the value to empty array
 
@@ -182,11 +169,11 @@ class Model:
         train_data = pd.DataFrame(np.zeros((1, 12)), columns=Model.columns)
 
         if len(data_frame) <= batch_size:
-            features = extract_feature(data_frame.to_numpy().reshape(-1, 1))
+            features = self.__extract_feature(data_frame.to_numpy().reshape(-1, 1))
             return features
 
-        for i in tqdm(range(batch, len(data_frame), batch)):
-            features = extract_feature(data_frame[before:i].to_numpy().reshape(-1, 1))
+        for i in tqdm(range(batch_size, len(data_frame), batch_size)):
+            features = self.__extract_feature(data_frame[before:i].to_numpy().reshape(-1, 1))
             before = i
             train_data = train_data.append(features, ignore_index=True)
 
@@ -198,3 +185,6 @@ class Model:
 
     def training(self, data_frame):
         self.__clf.fit(data_frame)
+
+if __name__ == '__main__':
+    clf = Model.load_model('motor_tmp.pkl')
