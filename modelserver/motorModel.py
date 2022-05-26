@@ -10,7 +10,6 @@ from scipy.stats import sem
 from scipy.stats import iqr
 
 
-
 class Model:
     columns = ['Mean', 'RMS', 'VAR', 'STD', 'GSTD', 'IQR', 'SEM', 'MAX_H', 'MIN_H', 'KUR', 'SKEW', 'CF']
 
@@ -179,20 +178,9 @@ class Model:
 
         return train_data[1:]
 
-    def predict(self,data_frame):
-        # 1정상 -1 비정상
+    def predict(self, data_frame):
         df = self.__feature_process(data_frame)
-        return (self.__clf.predict(df), self.__clf.decision_function(df).reshape(-1,1))
+        return self.__clf.predict(df)
 
     def training(self, data_frame):
         self.__clf.fit(data_frame)
-
-if __name__ == '__main__':
-    arr = np.random.randn(100);
-    df = pd.DataFrame(arr).astype('float')
-
-    motor = Model.load_model('motor_tmp.pkl')
-    pump = Model.load_model('pump_tmp.pkl')
-    print("model loaded")
-    res = motor.predict(df)
-    print(res)
