@@ -9,8 +9,6 @@ from scipy.stats import skew
 from scipy.stats import sem
 from scipy.stats import iqr
 
-
-
 class Model:
     columns = ['Mean', 'RMS', 'VAR', 'STD', 'GSTD', 'IQR', 'SEM', 'MAX_H', 'MIN_H', 'KUR', 'SKEW', 'CF']
 
