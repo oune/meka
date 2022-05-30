@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "express": "^4.17.2",
     "socket.io": "^4.4.1"
   }

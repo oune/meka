@@ -2,6 +2,7 @@ const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const net = require('net');
+const axios = require('axios');
 
 const app = express();
 const httpServer = createServer(app);
@@ -41,6 +42,7 @@ httpServer.listen(port, (socket) => {
     console.log(`app listening at http://localhost:${port}`)
 })
 
+const sockets = []
 function makeSensorSocket(port) {
     const server = net.createServer((client) => {
         console.log('Client connection: ');
@@ -61,10 +63,24 @@ function makeSensorSocket(port) {
             num.data = data
 
             dataList[port].push(num)
+            const maxDataSize = 10
 
             const sockets = await io.in(port.toString()).fetchSockets();
             sockets.forEach(socket => {
                 socket.emit("data", { date: date, data: data })
+
+                if (dataList[port].length > 10) {
+                    axios({
+                        method: 'post',
+                        url: '/model/pump',
+                        data: {
+                            array: dataList,
+                        }
+                    }).then(function (response) {
+                        console.log(response)
+                    });
+                    dataList = []
+                }
             });
         });
 
