@@ -41,17 +41,6 @@ httpServer.listen(port, (socket) => {
     console.log(`app listening at http://localhost:${port}`)
 })
 
-
-const sockets = []
-
-// setInterval(() => {
-//     sockets.forEach((socket) => {
-//         const vide = Math.random() * 2
-//         const temp = Math.random() * 30
-//         socket.emit("data", { vibe: vide, temp: temp })
-//     })
-// }, 1000)
-
 function makeSensorSocket(port) {
     const server = net.createServer((client) => {
         console.log('Client connection: ');
@@ -81,8 +70,6 @@ function makeSensorSocket(port) {
 
         function log() {
             console.log(dataList)
-
-            log
             console.log(`server ${port}`)
             console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
             console.log('  Bytes received: ' + client.bytesRead);

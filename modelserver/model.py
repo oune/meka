@@ -190,7 +190,6 @@ class Model:
 if __name__ == '__main__':
     arr = np.random.randn(100)
     df = pd.DataFrame(arr).astype('float')
-
     motor = Model.load_model('motor_tmp.pkl')
     pump = Model.load_model('pump_tmp.pkl')
     print("model loaded")
