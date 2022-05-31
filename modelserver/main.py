@@ -24,6 +24,6 @@ def detect_pump(data: Data):
 
 @app.post("/model/motor")
 def detect_pump(data: Data):
-    df = pd.DataFrame(data).astype('float')
+    df = pd.DataFrame(data.array).astype('float')
     a, b = pump.predict(df)
     return {"predicted": a.tolist(), "score": b.tolist()}

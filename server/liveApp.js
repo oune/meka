@@ -8,6 +8,7 @@ const app = express();
 const httpServer = createServer(app);
 const port = 3000
 const portList = [3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008]
+const modeList = ["pump", "pump", "pump", "pump"]
 const dataList = Object()
 
 portList.forEach((portNum) => {
@@ -36,6 +37,11 @@ io.on("connection", (socket) => {
 
         socket.join(data)
     });
+
+    socket.on('mode', async (packet) => {
+        console.log(`mode is changed: ${packet.port}, ${packet.mode}`)
+        modeList[packet.port - 3000] = packet.mode
+    });
 });
 
 function makeSensorSocket(port) {
@@ -63,29 +69,25 @@ function makeSensorSocket(port) {
             if (dataList[port].length > maxDataSize) {
                 axios({
                     method: 'post',
-                    url: 'http://127.0.0.1:8000/model/pump',
+                    url: `http://127.0.0.1:8000/model/${modeList[port - 3000]}`,
                     data: {
                         array: dataList[port],
                     }
                 }).then((response) => {
                     console.log(response.data)
+                    console.log(modeList[port - 3000])
                     sockets.forEach(async (socket) => {
                         socket.emit("model_result", { res: response.data })
                     });
+                }).catch((error) => {
+                    console.log("error")
+                    console.log(error.message)
+                    console.log(error.request)
                 })
+                console.log(modeList[port - 3000])
                 dataList[port] = []
             }
         });
-
-        function log() {
-            console.log(dataList)
-            console.log(`server ${port}`)
-            console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
-            console.log('  Bytes received: ' + client.bytesRead);
-            console.log(date)
-            console.log(data)
-            console.log('----------------------------------------')
-        }
 
         client.on('end', () => {
             console.log('Client disconnected');
@@ -101,6 +103,16 @@ function makeSensorSocket(port) {
         client.on('timeout', () => {
             console.log('Socket Timed out');
         });
+
+        function log() {
+            console.log(dataList)
+            console.log(`server ${port}`)
+            console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
+            console.log('  Bytes received: ' + client.bytesRead);
+            console.log(date)
+            console.log(data)
+            console.log('----------------------------------------')
+        }
     });
 
     server.listen(port, () => {
