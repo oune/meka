@@ -16,6 +16,7 @@
     let chartRef;
     let count = 0;
     let isEmpty = true;
+    let is_ok = true;
 
     socket.on("data", (arg) => {
         const { date, data } = arg;
@@ -31,7 +32,8 @@
     });
 
     socket.on("model_result", (res) => {
-        console.log(res);
+        const predicted = res.res.predicted[0];
+        is_ok = predicted == 1;
     });
 
     let data = {
@@ -46,6 +48,14 @@
         { id: 3, text: `펌프 진동센서` },
     ];
 </script>
+
+<h2>
+    서버 상태 {#if is_ok}
+        ✅
+    {:else}
+        ❗
+    {/if}
+</h2>
 
 <form>
     <select bind:value={selected}>

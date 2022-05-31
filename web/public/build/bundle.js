@@ -4142,14 +4142,68 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[11] = list[i];
+    	child_ctx[12] = list[i];
     	return child_ctx;
     }
 
-    // (52:8) {#each options as option}
+    // (55:4) {:else}
+    function create_else_block_1(ctx) {
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			t = text("❗");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block_1.name,
+    		type: "else",
+    		source: "(55:4) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (53:10) {#if is_ok}
+    function create_if_block_1(ctx) {
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			t = text("✅");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1.name,
+    		type: "if",
+    		source: "(53:10) {#if is_ok}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (62:8) {#each options as option}
     function create_each_block(ctx) {
     	let option;
-    	let t0_value = /*option*/ ctx[11].text + "";
+    	let t0_value = /*option*/ ctx[12].text + "";
     	let t0;
     	let t1;
 
@@ -4158,9 +4212,9 @@ var app = (function () {
     			option = element("option");
     			t0 = text(t0_value);
     			t1 = space();
-    			option.__value = /*option*/ ctx[11];
+    			option.__value = /*option*/ ctx[12];
     			option.value = option.__value;
-    			add_location(option, file$2, 52, 12, 1122);
+    			add_location(option, file$2, 62, 12, 1284);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -4177,20 +4231,20 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(52:8) {#each options as option}",
+    		source: "(62:8) {#each options as option}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (62:0) {:else}
+    // (72:0) {:else}
     function create_else_block(ctx) {
     	let chart;
     	let current;
-    	let chart_props = { data: /*data*/ ctx[3], type: "line" };
+    	let chart_props = { data: /*data*/ ctx[4], type: "line" };
     	chart = new Base$1({ props: chart_props, $$inline: true });
-    	/*chart_binding*/ ctx[7](chart);
+    	/*chart_binding*/ ctx[8](chart);
 
     	const block = {
     		c: function create() {
@@ -4214,7 +4268,7 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			/*chart_binding*/ ctx[7](null);
+    			/*chart_binding*/ ctx[8](null);
     			destroy_component(chart, detaching);
     		}
     	};
@@ -4223,14 +4277,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(62:0) {:else}",
+    		source: "(72:0) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (60:0) {#if isEmpty}
+    // (70:0) {#if isEmpty}
     function create_if_block(ctx) {
     	let p;
 
@@ -4238,7 +4292,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "수신한 데이터가 없습니다.";
-    			add_location(p, file$2, 60, 4, 1263);
+    			add_location(p, file$2, 70, 4, 1425);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -4255,7 +4309,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(60:0) {#if isEmpty}",
+    		source: "(70:0) {#if isEmpty}",
     		ctx
     	});
 
@@ -4263,16 +4317,27 @@ var app = (function () {
     }
 
     function create_fragment$2(ctx) {
+    	let h2;
+    	let t0;
+    	let t1;
     	let form;
     	let select;
-    	let t;
+    	let t2;
     	let current_block_type_index;
-    	let if_block;
-    	let if_block_anchor;
+    	let if_block1;
+    	let if_block1_anchor;
     	let current;
     	let mounted;
     	let dispose;
-    	let each_value = /*options*/ ctx[4];
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*is_ok*/ ctx[2]) return create_if_block_1;
+    		return create_else_block_1;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block0 = current_block_type(ctx);
+    	let each_value = /*options*/ ctx[5];
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -4283,16 +4348,20 @@ var app = (function () {
     	const if_block_creators = [create_if_block, create_else_block];
     	const if_blocks = [];
 
-    	function select_block_type(ctx, dirty) {
+    	function select_block_type_1(ctx, dirty) {
     		if (/*isEmpty*/ ctx[1]) return 0;
     		return 1;
     	}
 
-    	current_block_type_index = select_block_type(ctx);
-    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    	current_block_type_index = select_block_type_1(ctx);
+    	if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 
     	const block = {
     		c: function create() {
+    			h2 = element("h2");
+    			t0 = text("서버 상태 ");
+    			if_block0.c();
+    			t1 = space();
     			form = element("form");
     			select = element("select");
 
@@ -4300,17 +4369,22 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			t = space();
-    			if_block.c();
-    			if_block_anchor = empty$1();
-    			if (/*selected*/ ctx[2] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[6].call(select));
-    			add_location(select, file$2, 50, 4, 1043);
-    			add_location(form, file$2, 49, 0, 1031);
+    			t2 = space();
+    			if_block1.c();
+    			if_block1_anchor = empty$1();
+    			add_location(h2, file$2, 51, 0, 1109);
+    			if (/*selected*/ ctx[3] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[7].call(select));
+    			add_location(select, file$2, 60, 4, 1205);
+    			add_location(form, file$2, 59, 0, 1193);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
+    			insert_dev(target, h2, anchor);
+    			append_dev(h2, t0);
+    			if_block0.m(h2, null);
+    			insert_dev(target, t1, anchor);
     			insert_dev(target, form, anchor);
     			append_dev(form, select);
 
@@ -4318,20 +4392,30 @@ var app = (function () {
     				each_blocks[i].m(select, null);
     			}
 
-    			select_option(select, /*selected*/ ctx[2]);
-    			insert_dev(target, t, anchor);
+    			select_option(select, /*selected*/ ctx[3]);
+    			insert_dev(target, t2, anchor);
     			if_blocks[current_block_type_index].m(target, anchor);
-    			insert_dev(target, if_block_anchor, anchor);
+    			insert_dev(target, if_block1_anchor, anchor);
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(select, "change", /*select_change_handler*/ ctx[6]);
+    				dispose = listen_dev(select, "change", /*select_change_handler*/ ctx[7]);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*options*/ 16) {
-    				each_value = /*options*/ ctx[4];
+    			if (current_block_type !== (current_block_type = select_block_type(ctx))) {
+    				if_block0.d(1);
+    				if_block0 = current_block_type(ctx);
+
+    				if (if_block0) {
+    					if_block0.c();
+    					if_block0.m(h2, null);
+    				}
+    			}
+
+    			if (dirty & /*options*/ 32) {
+    				each_value = /*options*/ ctx[5];
     				validate_each_argument(each_value);
     				let i;
 
@@ -4354,12 +4438,12 @@ var app = (function () {
     				each_blocks.length = each_value.length;
     			}
 
-    			if (dirty & /*selected, options*/ 20) {
-    				select_option(select, /*selected*/ ctx[2]);
+    			if (dirty & /*selected, options*/ 40) {
+    				select_option(select, /*selected*/ ctx[3]);
     			}
 
     			let previous_block_index = current_block_type_index;
-    			current_block_type_index = select_block_type(ctx);
+    			current_block_type_index = select_block_type_1(ctx);
 
     			if (current_block_type_index === previous_block_index) {
     				if_blocks[current_block_type_index].p(ctx, dirty);
@@ -4371,34 +4455,37 @@ var app = (function () {
     				});
 
     				check_outros();
-    				if_block = if_blocks[current_block_type_index];
+    				if_block1 = if_blocks[current_block_type_index];
 
-    				if (!if_block) {
-    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-    					if_block.c();
+    				if (!if_block1) {
+    					if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block1.c();
     				} else {
-    					if_block.p(ctx, dirty);
+    					if_block1.p(ctx, dirty);
     				}
 
-    				transition_in(if_block, 1);
-    				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				transition_in(if_block1, 1);
+    				if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
     			}
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(if_block);
+    			transition_in(if_block1);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(if_block);
+    			transition_out(if_block1);
     			current = false;
     		},
     		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h2);
+    			if_block0.d();
+    			if (detaching) detach_dev(t1);
     			if (detaching) detach_dev(form);
     			destroy_each(each_blocks, detaching);
-    			if (detaching) detach_dev(t);
+    			if (detaching) detach_dev(t2);
     			if_blocks[current_block_type_index].d(detaching);
-    			if (detaching) detach_dev(if_block_anchor);
+    			if (detaching) detach_dev(if_block1_anchor);
     			mounted = false;
     			dispose();
     		}
@@ -4430,6 +4517,7 @@ var app = (function () {
     	let chartRef;
     	let count = 0;
     	let isEmpty = true;
+    	let is_ok = true;
 
     	socket.on("data", arg => {
     		const { date, data } = arg;
@@ -4444,7 +4532,8 @@ var app = (function () {
     	});
 
     	socket.on("model_result", res => {
-    		console.log(res);
+    		const predicted = res.res.predicted[0];
+    		$$invalidate(2, is_ok = predicted == 1);
     	});
 
     	let data = { labels: [], datasets: [{ values: [] }] };
@@ -4464,8 +4553,8 @@ var app = (function () {
 
     	function select_change_handler() {
     		selected = select_value(this);
-    		$$invalidate(2, selected);
-    		$$invalidate(4, options);
+    		$$invalidate(3, selected);
+    		$$invalidate(5, options);
     	}
 
     	function chart_binding($$value) {
@@ -4476,7 +4565,7 @@ var app = (function () {
     	}
 
     	$$self.$$set = $$props => {
-    		if ('port' in $$props) $$invalidate(5, port = $$props.port);
+    		if ('port' in $$props) $$invalidate(6, port = $$props.port);
     	};
 
     	$$self.$capture_state = () => ({
@@ -4488,19 +4577,21 @@ var app = (function () {
     		chartRef,
     		count,
     		isEmpty,
+    		is_ok,
     		data,
     		selected,
     		options
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('port' in $$props) $$invalidate(5, port = $$props.port);
+    		if ('port' in $$props) $$invalidate(6, port = $$props.port);
     		if ('chartRef' in $$props) $$invalidate(0, chartRef = $$props.chartRef);
     		if ('count' in $$props) count = $$props.count;
     		if ('isEmpty' in $$props) $$invalidate(1, isEmpty = $$props.isEmpty);
-    		if ('data' in $$props) $$invalidate(3, data = $$props.data);
-    		if ('selected' in $$props) $$invalidate(2, selected = $$props.selected);
-    		if ('options' in $$props) $$invalidate(4, options = $$props.options);
+    		if ('is_ok' in $$props) $$invalidate(2, is_ok = $$props.is_ok);
+    		if ('data' in $$props) $$invalidate(4, data = $$props.data);
+    		if ('selected' in $$props) $$invalidate(3, selected = $$props.selected);
+    		if ('options' in $$props) $$invalidate(5, options = $$props.options);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -4510,6 +4601,7 @@ var app = (function () {
     	return [
     		chartRef,
     		isEmpty,
+    		is_ok,
     		selected,
     		data,
     		options,
@@ -4522,7 +4614,7 @@ var app = (function () {
     class Sensor extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$2, create_fragment$2, safe_not_equal, { port: 5 });
+    		init(this, options, instance$2, create_fragment$2, safe_not_equal, { port: 6 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -4534,7 +4626,7 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*port*/ ctx[5] === undefined && !('port' in props)) {
+    		if (/*port*/ ctx[6] === undefined && !('port' in props)) {
     			console_1.warn("<Sensor> was created without expected prop 'port'");
     		}
     	}
