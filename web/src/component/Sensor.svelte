@@ -22,13 +22,16 @@
         isEmpty = false;
 
         chartRef.addDataPoint(date, [data]);
-        console.log(count);
 
         if (count > 50) {
             chartRef.removeDataPoint(0);
         } else {
             count++;
         }
+    });
+
+    socket.on("model_result", (res) => {
+        console.log(res);
     });
 
     let data = {

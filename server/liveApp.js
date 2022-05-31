@@ -77,8 +77,11 @@ function makeSensorSocket(port) {
                     data: {
                         array: dataList[port],
                     }
-                }).then(function (response) {
+                }).then((response) => {
                     console.log(response.data)
+                    sockets.forEach(async (socket) => {
+                        socket.emit("model_result", { res: response.data })
+                    });
                 })
                 dataList[port] = []
             }
