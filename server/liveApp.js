@@ -62,26 +62,26 @@ function makeSensorSocket(port) {
             num.date = date
             num.data = data
 
-            dataList[port].push(num)
-            const maxDataSize = 10
+            dataList[port].push(num.data)
 
             const sockets = await io.in(port.toString()).fetchSockets();
-            sockets.forEach(socket => {
+            sockets.forEach(async (socket) => {
                 socket.emit("data", { date: date, data: data })
-
-                if (dataList[port].length > 10) {
-                    axios({
-                        method: 'post',
-                        url: '/model/pump',
-                        data: {
-                            array: dataList,
-                        }
-                    }).then(function (response) {
-                        console.log(response)
-                    });
-                    dataList = []
-                }
             });
+
+            const maxDataSize = 4
+            if (dataList[port].length > maxDataSize) {
+                axios({
+                    method: 'post',
+                    url: 'http://127.0.0.1:8000/model/pump',
+                    data: {
+                        array: dataList[port],
+                    }
+                }).then(function (response) {
+                    console.log(response.data)
+                })
+                dataList[port] = []
+            }
         });
 
         function log() {

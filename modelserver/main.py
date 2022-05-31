@@ -11,7 +11,7 @@ pump = model.Model.load_model('../model/pump_tmp.pkl')
 
 
 class Data(BaseModel):
-    array: List[int] = []
+    array: List[int]
 
 
 # 만개 단위로 송수신
