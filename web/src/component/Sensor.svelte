@@ -44,9 +44,14 @@
     let selected;
     let options = [
         // { id: 1, text: `온도센서` },
-        { id: 1, text: `모터 진동센서` },
-        { id: 2, text: `펌프 진동센서` },
+        { id: "motor", text: `모터 진동센서` },
+        { id: "pump", text: `펌프 진동센서` },
     ];
+
+    function select_change() {
+        socket.emit("mode", selected.id);
+        console.log("mode changed");
+    }
 </script>
 
 <h2>
@@ -58,7 +63,7 @@
 </h2>
 
 <form>
-    <select bind:value={selected}>
+    <select bind:value={selected} on:change={select_change}>
         {#each options as option}
             <option value={option}>
                 {option.text}
