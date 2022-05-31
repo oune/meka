@@ -23,12 +23,12 @@ const io = new Server(httpServer, {
     }
 });
 
-io.on("connection", (socket) => {
-    sockets.push(socket)
+httpServer.listen(port, (socket) => {
+    console.log(`app listening at http://localhost:${port}`)
+})
 
-    //log
+io.on("connection", (socket) => {
     console.log(`connection on: ${socket.id}`)
-    console.log(`total sockets: ${sockets.length}`)
 
     socket.on("join", async (data) => {
         await console.log(`connection on: ${socket.id}`)
@@ -38,11 +38,6 @@ io.on("connection", (socket) => {
     });
 });
 
-httpServer.listen(port, (socket) => {
-    console.log(`app listening at http://localhost:${port}`)
-})
-
-const sockets = []
 function makeSensorSocket(port) {
     const server = net.createServer((client) => {
         console.log('Client connection: ');
@@ -54,15 +49,10 @@ function makeSensorSocket(port) {
 
         client.on('data', async (packet) => {
             const strs = packet.toString().split("\t")
-
             const date = strs[0]
             const data = strs[1]
 
-            const num = Object()
-            num.date = date
-            num.data = data
-
-            dataList[port].push(num.data)
+            dataList[port].push(data)
 
             const sockets = await io.in(port.toString()).fetchSockets();
             sockets.forEach(async (socket) => {

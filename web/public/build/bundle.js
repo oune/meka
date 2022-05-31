@@ -4173,7 +4173,7 @@ var app = (function () {
     	return block;
     }
 
-    // (53:10) {#if is_ok}
+    // (53:9) {#if is_ok}
     function create_if_block_1(ctx) {
     	let t;
 
@@ -4193,7 +4193,7 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(53:10) {#if is_ok}",
+    		source: "(53:9) {#if is_ok}",
     		ctx
     	});
 
@@ -4214,7 +4214,7 @@ var app = (function () {
     			t1 = space();
     			option.__value = /*option*/ ctx[12];
     			option.value = option.__value;
-    			add_location(option, file$2, 62, 12, 1284);
+    			add_location(option, file$2, 62, 12, 1286);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -4292,7 +4292,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "수신한 데이터가 없습니다.";
-    			add_location(p, file$2, 70, 4, 1425);
+    			add_location(p, file$2, 70, 4, 1427);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -4359,7 +4359,7 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			h2 = element("h2");
-    			t0 = text("서버 상태 ");
+    			t0 = text("상태 : ");
     			if_block0.c();
     			t1 = space();
     			form = element("form");
@@ -4372,10 +4372,10 @@ var app = (function () {
     			t2 = space();
     			if_block1.c();
     			if_block1_anchor = empty$1();
-    			add_location(h2, file$2, 51, 0, 1109);
+    			add_location(h2, file$2, 51, 0, 1112);
     			if (/*selected*/ ctx[3] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[7].call(select));
-    			add_location(select, file$2, 60, 4, 1205);
-    			add_location(form, file$2, 59, 0, 1193);
+    			add_location(select, file$2, 60, 4, 1207);
+    			add_location(form, file$2, 59, 0, 1195);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4540,9 +4540,9 @@ var app = (function () {
     	let selected;
 
     	let options = [
-    		{ id: 1, text: `온도센서` },
-    		{ id: 2, text: `모터 진동센서` },
-    		{ id: 3, text: `펌프 진동센서` }
+    		// { id: 1, text: `온도센서` },
+    		{ id: 1, text: `모터 진동센서` },
+    		{ id: 2, text: `펌프 진동센서` }
     	];
 
     	const writable_props = ['port'];

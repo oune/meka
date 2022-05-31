@@ -43,14 +43,14 @@
 
     let selected;
     let options = [
-        { id: 1, text: `온도센서` },
-        { id: 2, text: `모터 진동센서` },
-        { id: 3, text: `펌프 진동센서` },
+        // { id: 1, text: `온도센서` },
+        { id: 1, text: `모터 진동센서` },
+        { id: 2, text: `펌프 진동센서` },
     ];
 </script>
 
 <h2>
-    서버 상태 {#if is_ok}
+    상태 : {#if is_ok}
         ✅
     {:else}
         ❗
