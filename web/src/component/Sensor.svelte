@@ -43,9 +43,8 @@
 
     let selected;
     let options = [
-        // { id: 1, text: `온도센서` },
-        { id: "motor", text: `모터 진동센서` },
         { id: "pump", text: `펌프 진동센서` },
+        { id: "motor", text: `모터 진동센서` },
     ];
 
     function select_change() {

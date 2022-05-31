@@ -4146,7 +4146,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (63:4) {:else}
+    // (62:4) {:else}
     function create_else_block_1(ctx) {
     	let t;
 
@@ -4166,14 +4166,14 @@ var app = (function () {
     		block,
     		id: create_else_block_1.name,
     		type: "else",
-    		source: "(63:4) {:else}",
+    		source: "(62:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (61:9) {#if is_ok}
+    // (60:9) {#if is_ok}
     function create_if_block_1(ctx) {
     	let t;
 
@@ -4193,14 +4193,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(61:9) {#if is_ok}",
+    		source: "(60:9) {#if is_ok}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (70:8) {#each options as option}
+    // (69:8) {#each options as option}
     function create_each_block(ctx) {
     	let option;
     	let t0_value = /*option*/ ctx[13].text + "";
@@ -4214,7 +4214,7 @@ var app = (function () {
     			t1 = space();
     			option.__value = /*option*/ ctx[13];
     			option.value = option.__value;
-    			add_location(option, file$2, 70, 12, 1514);
+    			add_location(option, file$2, 69, 12, 1477);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -4231,14 +4231,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(70:8) {#each options as option}",
+    		source: "(69:8) {#each options as option}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (80:0) {:else}
+    // (79:0) {:else}
     function create_else_block(ctx) {
     	let chart;
     	let current;
@@ -4277,14 +4277,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(80:0) {:else}",
+    		source: "(79:0) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (78:0) {#if isEmpty}
+    // (77:0) {#if isEmpty}
     function create_if_block(ctx) {
     	let p;
 
@@ -4292,7 +4292,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "수신한 데이터가 없습니다.";
-    			add_location(p, file$2, 78, 4, 1655);
+    			add_location(p, file$2, 77, 4, 1618);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -4309,7 +4309,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(78:0) {#if isEmpty}",
+    		source: "(77:0) {#if isEmpty}",
     		ctx
     	});
 
@@ -4372,10 +4372,10 @@ var app = (function () {
     			t2 = space();
     			if_block1.c();
     			if_block1_anchor = empty$1();
-    			add_location(h2, file$2, 59, 0, 1314);
+    			add_location(h2, file$2, 58, 0, 1277);
     			if (/*selected*/ ctx[3] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[8].call(select));
-    			add_location(select, file$2, 68, 4, 1409);
-    			add_location(form, file$2, 67, 0, 1397);
+    			add_location(select, file$2, 67, 4, 1372);
+    			add_location(form, file$2, 66, 0, 1360);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4542,12 +4542,7 @@ var app = (function () {
 
     	let data = { labels: [], datasets: [{ values: [] }] };
     	let selected;
-
-    	let options = [
-    		// { id: 1, text: `온도센서` },
-    		{ id: "motor", text: `모터 진동센서` },
-    		{ id: "pump", text: `펌프 진동센서` }
-    	];
+    	let options = [{ id: "pump", text: `펌프 진동센서` }, { id: "motor", text: `모터 진동센서` }];
 
     	function select_change() {
     		socket.emit("mode", { port: port.toString(), mode: selected.id });
