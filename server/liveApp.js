@@ -76,6 +76,7 @@ function makeSensorSocket(port) {
                 }).then((response) => {
                     console.log(response.data)
                     console.log(modeList[port - 3000])
+
                     sockets.forEach(async (socket) => {
                         socket.emit("model_result", { res: response.data })
                     });
@@ -84,7 +85,6 @@ function makeSensorSocket(port) {
                     console.log(error.message)
                     console.log(error.request)
                 })
-                console.log(modeList[port - 3000])
                 dataList[port] = []
             }
         });
