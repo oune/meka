@@ -30,14 +30,10 @@ io.on("connection", (socket) => {
     console.log(`connection on: ${socket.id}`)
 
     socket.on("join", async (data) => {
-        await console.log(`connection on: ${socket.id}`)
-        await console.log(`data : ${data}`)
-
         socket.join(data)
     });
 
     socket.on('mode', async (packet) => {
-        console.log(`mode is changed: ${packet.port}, ${packet.mode}`)
         modeList[packet.port - 3000] = packet.mode
     });
 });
@@ -86,9 +82,6 @@ function makeSensorSocket(port) {
 
         client.on('end', () => {
             console.log('Client disconnected');
-            server.getConnections((err, count) => {
-                console.log('Remaining Connections: ' + count);
-            });
         });
 
         client.on('error', (err) => {
