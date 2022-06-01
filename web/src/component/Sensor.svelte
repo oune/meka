@@ -52,7 +52,6 @@
             port: port.toString(),
             mode: selected.id,
         });
-        console.log("mode changed");
     }
 </script>
 

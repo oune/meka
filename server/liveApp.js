@@ -15,8 +15,6 @@ portList.forEach((portNum) => {
     dataList[portNum] = []
 });
 
-console.log(dataList)
-
 const io = new Server(httpServer, {
     cors: {
         origin: "http://localhost:5000",
@@ -74,9 +72,6 @@ function makeSensorSocket(port) {
                         array: dataList[port],
                     }
                 }).then((response) => {
-                    console.log(response.data)
-                    console.log(modeList[port - 3000])
-
                     sockets.forEach(async (socket) => {
                         socket.emit("model_result", { res: response.data })
                     });
