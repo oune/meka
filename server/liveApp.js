@@ -59,7 +59,8 @@ function makeSensorSocket(port) {
                 socket.emit("data", { date: date, data: data })
             });
 
-            const maxDataSize = 4
+            // const maxDataSize = 5
+            const maxDataSize = 100000
             if (dataList[port].length > maxDataSize) {
                 axios({
                     method: 'post',
