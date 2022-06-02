@@ -16,7 +16,7 @@
     let chartRef;
     let count = 0;
     let isEmpty = true;
-    let is_ok = true;
+    let model_res = 0;
 
     socket.on("data", (arg) => {
         const { date, data } = arg;
@@ -33,7 +33,7 @@
 
     socket.on("model_result", (res) => {
         const predicted = res.res.predicted[0];
-        is_ok = predicted == 1;
+        model_res = predicted;
     });
 
     let data = {
@@ -56,10 +56,12 @@
 </script>
 
 <h2>
-    상태 : {#if is_ok}
+    상태 : {#if model_res == 1}
         ✅
-    {:else}
+    {:else if model_res == -1}
         ❗
+    {:else}
+        분석중
     {/if}
 </h2>
 
