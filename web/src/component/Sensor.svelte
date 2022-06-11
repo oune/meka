@@ -52,6 +52,7 @@
             port: port.toString(),
             mode: selected.id,
         });
+        model_res = 0;
     }
 </script>
 
