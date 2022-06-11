@@ -31,15 +31,30 @@
         }
     });
 
-    socket.on("model_result", (res) => {
-        const predicted = res.res.predicted[0];
-        model_res = predicted;
-    });
-
     let data = {
         labels: [],
         datasets: [{ values: [] }],
     };
+
+    socket.on("model_result", (res) => {
+        const predicted = res.res.predicted[0];
+        model_res = predicted;
+        isEmpty = false;
+
+        const scores = res.res.score;
+        const predicts = res.res.predicted;
+
+        data = {
+            labels: predicts,
+            datasets: [
+                {
+                    values: scores,
+                },
+            ],
+        };
+        console.log(scores);
+        console.log(data);
+    });
 
     let selected;
     let options = [
