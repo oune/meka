@@ -61,7 +61,7 @@
     {:else if model_res == -1}
         ❗
     {:else}
-        분석중
+        대기중
     {/if}
 </h2>
 

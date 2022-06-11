@@ -4146,8 +4146,35 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (61:4) {:else}
+    // (63:4) {:else}
     function create_else_block_1(ctx) {
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			t = text("대기중");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block_1.name,
+    		type: "else",
+    		source: "(63:4) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (61:30) 
+    function create_if_block_2(ctx) {
     	let t;
 
     	const block = {
@@ -4164,16 +4191,16 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block_1.name,
-    		type: "else",
-    		source: "(61:4) {:else}",
+    		id: create_if_block_2.name,
+    		type: "if",
+    		source: "(61:30) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (59:9) {#if is_ok}
+    // (59:9) {#if model_res == 1}
     function create_if_block_1(ctx) {
     	let t;
 
@@ -4193,14 +4220,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(59:9) {#if is_ok}",
+    		source: "(59:9) {#if model_res == 1}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (68:8) {#each options as option}
+    // (70:8) {#each options as option}
     function create_each_block(ctx) {
     	let option;
     	let t0_value = /*option*/ ctx[13].text + "";
@@ -4214,7 +4241,7 @@ var app = (function () {
     			t1 = space();
     			option.__value = /*option*/ ctx[13];
     			option.value = option.__value;
-    			add_location(option, file$2, 68, 12, 1439);
+    			add_location(option, file$2, 70, 12, 1493);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -4231,14 +4258,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(68:8) {#each options as option}",
+    		source: "(70:8) {#each options as option}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (78:0) {:else}
+    // (80:0) {:else}
     function create_else_block(ctx) {
     	let chart;
     	let current;
@@ -4277,14 +4304,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(78:0) {:else}",
+    		source: "(80:0) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (76:0) {#if isEmpty}
+    // (78:0) {#if isEmpty}
     function create_if_block(ctx) {
     	let p;
 
@@ -4292,7 +4319,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "수신한 데이터가 없습니다.";
-    			add_location(p, file$2, 76, 4, 1580);
+    			add_location(p, file$2, 78, 4, 1634);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -4309,7 +4336,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(76:0) {#if isEmpty}",
+    		source: "(78:0) {#if isEmpty}",
     		ctx
     	});
 
@@ -4331,7 +4358,8 @@ var app = (function () {
     	let dispose;
 
     	function select_block_type(ctx, dirty) {
-    		if (/*is_ok*/ ctx[2]) return create_if_block_1;
+    		if (/*model_res*/ ctx[2] == 1) return create_if_block_1;
+    		if (/*model_res*/ ctx[2] == -1) return create_if_block_2;
     		return create_else_block_1;
     	}
 
@@ -4374,8 +4402,8 @@ var app = (function () {
     			if_block1_anchor = empty$1();
     			add_location(h2, file$2, 57, 0, 1239);
     			if (/*selected*/ ctx[3] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[8].call(select));
-    			add_location(select, file$2, 66, 4, 1334);
-    			add_location(form, file$2, 65, 0, 1322);
+    			add_location(select, file$2, 68, 4, 1388);
+    			add_location(form, file$2, 67, 0, 1376);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4521,7 +4549,7 @@ var app = (function () {
     	let chartRef;
     	let count = 0;
     	let isEmpty = true;
-    	let is_ok = true;
+    	let model_res = 0;
 
     	socket.on("data", arg => {
     		const { date, data } = arg;
@@ -4537,7 +4565,7 @@ var app = (function () {
 
     	socket.on("model_result", res => {
     		const predicted = res.res.predicted[0];
-    		$$invalidate(2, is_ok = predicted == 1);
+    		$$invalidate(2, model_res = predicted);
     	});
 
     	let data = { labels: [], datasets: [{ values: [] }] };
@@ -4580,7 +4608,7 @@ var app = (function () {
     		chartRef,
     		count,
     		isEmpty,
-    		is_ok,
+    		model_res,
     		data,
     		selected,
     		options,
@@ -4592,7 +4620,7 @@ var app = (function () {
     		if ('chartRef' in $$props) $$invalidate(0, chartRef = $$props.chartRef);
     		if ('count' in $$props) count = $$props.count;
     		if ('isEmpty' in $$props) $$invalidate(1, isEmpty = $$props.isEmpty);
-    		if ('is_ok' in $$props) $$invalidate(2, is_ok = $$props.is_ok);
+    		if ('model_res' in $$props) $$invalidate(2, model_res = $$props.model_res);
     		if ('data' in $$props) $$invalidate(4, data = $$props.data);
     		if ('selected' in $$props) $$invalidate(3, selected = $$props.selected);
     		if ('options' in $$props) $$invalidate(5, options = $$props.options);
@@ -4605,7 +4633,7 @@ var app = (function () {
     	return [
     		chartRef,
     		isEmpty,
-    		is_ok,
+    		model_res,
     		selected,
     		data,
     		options,

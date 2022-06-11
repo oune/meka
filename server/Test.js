@@ -48,37 +48,9 @@ function makeSensorSocket(port) {
         client.setEncoding('utf8');
 
         client.on('data', async (packet) => {
-            const strs = packet.toString().split("\t")
-            const date = strs[0]
-            const data = strs[1].substring('\r', '')
+            const strs = packet.toString()
 
-            dataList[port].push(data)
-
-            const sockets = await io.in(port.toString()).fetchSockets();
-            sockets.forEach(async (socket) => {
-                socket.emit("data", { date: date, data: data })
-            });
-
-            // const maxDataSize = 5
-            const maxDataSize = 100000
-            if (dataList[port].length > maxDataSize) {
-                axios({
-                    method: 'post',
-                    url: `http://127.0.0.1:8000/model/${modeList[port - 3000]}`,
-                    data: {
-                        array: dataList[port],
-                    }
-                }).then((response) => {
-                    sockets.forEach(async (socket) => {
-                        socket.emit("model_result", { res: response.data })
-                    });
-                }).catch((error) => {
-                    console.log("error")
-                    console.log(error.message)
-                    console.log(error.request)
-                })
-                dataList[port] = []
-            }
+            console.log(strs)
         });
 
         client.on('end', () => {
