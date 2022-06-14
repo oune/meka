@@ -4146,7 +4146,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (63:4) {:else}
+    // (79:4) {:else}
     function create_else_block_1(ctx) {
     	let t;
 
@@ -4166,14 +4166,14 @@ var app = (function () {
     		block,
     		id: create_else_block_1.name,
     		type: "else",
-    		source: "(63:4) {:else}",
+    		source: "(79:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (61:30) 
+    // (77:30) 
     function create_if_block_2(ctx) {
     	let t;
 
@@ -4193,14 +4193,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(61:30) ",
+    		source: "(77:30) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (59:9) {#if model_res == 1}
+    // (75:9) {#if model_res == 1}
     function create_if_block_1(ctx) {
     	let t;
 
@@ -4220,14 +4220,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(59:9) {#if model_res == 1}",
+    		source: "(75:9) {#if model_res == 1}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (70:8) {#each options as option}
+    // (86:8) {#each options as option}
     function create_each_block(ctx) {
     	let option;
     	let t0_value = /*option*/ ctx[13].text + "";
@@ -4241,7 +4241,7 @@ var app = (function () {
     			t1 = space();
     			option.__value = /*option*/ ctx[13];
     			option.value = option.__value;
-    			add_location(option, file$2, 70, 12, 1493);
+    			add_location(option, file$2, 86, 12, 1867);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -4258,18 +4258,18 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(70:8) {#each options as option}",
+    		source: "(86:8) {#each options as option}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (80:0) {:else}
+    // (96:0) {:else}
     function create_else_block(ctx) {
     	let chart;
     	let current;
-    	let chart_props = { data: /*data*/ ctx[4], type: "line" };
+    	let chart_props = { data: /*data*/ ctx[3], type: "line" };
     	chart = new Base$1({ props: chart_props, $$inline: true });
     	/*chart_binding*/ ctx[9](chart);
 
@@ -4283,6 +4283,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const chart_changes = {};
+    			if (dirty & /*data*/ 8) chart_changes.data = /*data*/ ctx[3];
     			chart.$set(chart_changes);
     		},
     		i: function intro(local) {
@@ -4304,14 +4305,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(80:0) {:else}",
+    		source: "(96:0) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (78:0) {#if isEmpty}
+    // (94:0) {#if isEmpty}
     function create_if_block(ctx) {
     	let p;
 
@@ -4319,7 +4320,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "수신한 데이터가 없습니다.";
-    			add_location(p, file$2, 78, 4, 1634);
+    			add_location(p, file$2, 94, 4, 2008);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -4336,7 +4337,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(78:0) {#if isEmpty}",
+    		source: "(94:0) {#if isEmpty}",
     		ctx
     	});
 
@@ -4400,10 +4401,10 @@ var app = (function () {
     			t2 = space();
     			if_block1.c();
     			if_block1_anchor = empty$1();
-    			add_location(h2, file$2, 57, 0, 1239);
-    			if (/*selected*/ ctx[3] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[8].call(select));
-    			add_location(select, file$2, 68, 4, 1388);
-    			add_location(form, file$2, 67, 0, 1376);
+    			add_location(h2, file$2, 73, 0, 1613);
+    			if (/*selected*/ ctx[4] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[8].call(select));
+    			add_location(select, file$2, 84, 4, 1762);
+    			add_location(form, file$2, 83, 0, 1750);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4420,7 +4421,7 @@ var app = (function () {
     				each_blocks[i].m(select, null);
     			}
 
-    			select_option(select, /*selected*/ ctx[3]);
+    			select_option(select, /*selected*/ ctx[4]);
     			insert_dev(target, t2, anchor);
     			if_blocks[current_block_type_index].m(target, anchor);
     			insert_dev(target, if_block1_anchor, anchor);
@@ -4470,8 +4471,8 @@ var app = (function () {
     				each_blocks.length = each_value.length;
     			}
 
-    			if (dirty & /*selected, options*/ 40) {
-    				select_option(select, /*selected*/ ctx[3]);
+    			if (dirty & /*selected, options*/ 48) {
+    				select_option(select, /*selected*/ ctx[4]);
     			}
 
     			let previous_block_index = current_block_type_index;
@@ -4563,17 +4564,30 @@ var app = (function () {
     		}
     	});
 
+    	let data = { labels: [], datasets: [{ values: [] }] };
+
     	socket.on("model_result", res => {
     		const predicted = res.res.predicted[0];
     		$$invalidate(2, model_res = predicted);
+    		$$invalidate(1, isEmpty = false);
+    		const scores = res.res.score;
+    		const predicts = res.res.predicted;
+
+    		$$invalidate(3, data = {
+    			labels: predicts,
+    			datasets: [{ values: scores }]
+    		});
+
+    		console.log(scores);
+    		console.log(data);
     	});
 
-    	let data = { labels: [], datasets: [{ values: [] }] };
     	let selected;
     	let options = [{ id: "pump", text: `펌프 진동센서` }, { id: "motor", text: `모터 진동센서` }];
 
     	function select_change() {
     		socket.emit("mode", { port: port.toString(), mode: selected.id });
+    		$$invalidate(2, model_res = 0);
     	}
 
     	const writable_props = ['port'];
@@ -4584,7 +4598,7 @@ var app = (function () {
 
     	function select_change_handler() {
     		selected = select_value(this);
-    		$$invalidate(3, selected);
+    		$$invalidate(4, selected);
     		$$invalidate(5, options);
     	}
 
@@ -4621,8 +4635,8 @@ var app = (function () {
     		if ('count' in $$props) count = $$props.count;
     		if ('isEmpty' in $$props) $$invalidate(1, isEmpty = $$props.isEmpty);
     		if ('model_res' in $$props) $$invalidate(2, model_res = $$props.model_res);
-    		if ('data' in $$props) $$invalidate(4, data = $$props.data);
-    		if ('selected' in $$props) $$invalidate(3, selected = $$props.selected);
+    		if ('data' in $$props) $$invalidate(3, data = $$props.data);
+    		if ('selected' in $$props) $$invalidate(4, selected = $$props.selected);
     		if ('options' in $$props) $$invalidate(5, options = $$props.options);
     	};
 
@@ -4634,8 +4648,8 @@ var app = (function () {
     		chartRef,
     		isEmpty,
     		model_res,
-    		selected,
     		data,
+    		selected,
     		options,
     		select_change,
     		port,
