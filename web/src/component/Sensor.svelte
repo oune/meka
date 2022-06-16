@@ -73,9 +73,9 @@
 
 <h2>
     상태 : {#if model_res == 1}
-        ✅
+        ✅ 정상
     {:else if model_res == -1}
-        ❗
+        ❗이상 감지됨
     {:else}
         대기중
     {/if}
