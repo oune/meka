@@ -68,6 +68,7 @@
             mode: selected.id,
         });
         model_res = 0;
+        isEmpty = true;
     }
 </script>
 
