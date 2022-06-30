@@ -110,12 +110,12 @@ portList.forEach((port) => {
 })
 
 const webApp = express();
-const webAppPort = 4000;
+const webAppPort = 5000;
 
 webApp.use(express.static('public'));
 webApp.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 webApp.listen(webAppPort, () => {
-    console.log(`Server is up at port ${webAppPort}`);
+    console.log(`Server is up at port \t http://localhost:${webAppPort}`);
 });
