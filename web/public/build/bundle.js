@@ -1293,26 +1293,21 @@ var app = (function () {
         return fileReader.readAsDataURL(data);
     };
 
-    /*
-     * base64-arraybuffer 1.0.1 <https://github.com/niklasvh/base64-arraybuffer>
-     * Copyright (c) 2021 Niklas von Hertzen <https://hertzen.com>
-     * Released under MIT License
-     */
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
     // Use a lookup table to find the index.
-    var lookup$1 = typeof Uint8Array === 'undefined' ? [] : new Uint8Array(256);
-    for (var i$1 = 0; i$1 < chars.length; i$1++) {
-        lookup$1[chars.charCodeAt(i$1)] = i$1;
+    const lookup$1 = typeof Uint8Array === 'undefined' ? [] : new Uint8Array(256);
+    for (let i = 0; i < chars.length; i++) {
+        lookup$1[chars.charCodeAt(i)] = i;
     }
-    var decode$2 = function (base64) {
-        var bufferLength = base64.length * 0.75, len = base64.length, i, p = 0, encoded1, encoded2, encoded3, encoded4;
+    const decode$2 = (base64) => {
+        let bufferLength = base64.length * 0.75, len = base64.length, i, p = 0, encoded1, encoded2, encoded3, encoded4;
         if (base64[base64.length - 1] === '=') {
             bufferLength--;
             if (base64[base64.length - 2] === '=') {
                 bufferLength--;
             }
         }
-        var arraybuffer = new ArrayBuffer(bufferLength), bytes = new Uint8Array(arraybuffer);
+        const arraybuffer = new ArrayBuffer(bufferLength), bytes = new Uint8Array(arraybuffer);
         for (i = 0; i < len; i += 4) {
             encoded1 = lookup$1[base64.charCodeAt(i)];
             encoded2 = lookup$1[base64.charCodeAt(i + 1)];
@@ -4146,7 +4141,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (79:4) {:else}
+    // (80:4) {:else}
     function create_else_block_1(ctx) {
     	let t;
 
@@ -4166,20 +4161,20 @@ var app = (function () {
     		block,
     		id: create_else_block_1.name,
     		type: "else",
-    		source: "(79:4) {:else}",
+    		source: "(80:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (77:30) 
+    // (78:30) 
     function create_if_block_2(ctx) {
     	let t;
 
     	const block = {
     		c: function create() {
-    			t = text("❗");
+    			t = text("❗이상 감지됨");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t, anchor);
@@ -4193,20 +4188,20 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(77:30) ",
+    		source: "(78:30) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (75:9) {#if model_res == 1}
+    // (76:9) {#if model_res == 1}
     function create_if_block_1(ctx) {
     	let t;
 
     	const block = {
     		c: function create() {
-    			t = text("✅");
+    			t = text("✅ 정상");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t, anchor);
@@ -4220,14 +4215,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(75:9) {#if model_res == 1}",
+    		source: "(76:9) {#if model_res == 1}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (86:8) {#each options as option}
+    // (87:8) {#each options as option}
     function create_each_block(ctx) {
     	let option;
     	let t0_value = /*option*/ ctx[13].text + "";
@@ -4241,7 +4236,7 @@ var app = (function () {
     			t1 = space();
     			option.__value = /*option*/ ctx[13];
     			option.value = option.__value;
-    			add_location(option, file$2, 86, 12, 1867);
+    			add_location(option, file$2, 87, 12, 1901);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -4258,14 +4253,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(86:8) {#each options as option}",
+    		source: "(87:8) {#each options as option}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (96:0) {:else}
+    // (97:0) {:else}
     function create_else_block(ctx) {
     	let chart;
     	let current;
@@ -4305,14 +4300,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(96:0) {:else}",
+    		source: "(97:0) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (94:0) {#if isEmpty}
+    // (95:0) {#if isEmpty}
     function create_if_block(ctx) {
     	let p;
 
@@ -4320,7 +4315,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "수신한 데이터가 없습니다.";
-    			add_location(p, file$2, 94, 4, 2008);
+    			add_location(p, file$2, 95, 4, 2042);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -4337,7 +4332,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(94:0) {#if isEmpty}",
+    		source: "(95:0) {#if isEmpty}",
     		ctx
     	});
 
@@ -4401,10 +4396,10 @@ var app = (function () {
     			t2 = space();
     			if_block1.c();
     			if_block1_anchor = empty$1();
-    			add_location(h2, file$2, 73, 0, 1613);
+    			add_location(h2, file$2, 74, 0, 1638);
     			if (/*selected*/ ctx[4] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[8].call(select));
-    			add_location(select, file$2, 84, 4, 1762);
-    			add_location(form, file$2, 83, 0, 1750);
+    			add_location(select, file$2, 85, 4, 1796);
+    			add_location(form, file$2, 84, 0, 1784);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4588,6 +4583,7 @@ var app = (function () {
     	function select_change() {
     		socket.emit("mode", { port: port.toString(), mode: selected.id });
     		$$invalidate(2, model_res = 0);
+    		$$invalidate(1, isEmpty = true);
     	}
 
     	const writable_props = ['port'];
@@ -4848,22 +4844,22 @@ var app = (function () {
     	let current;
 
     	block0 = new Block({
-    			props: { sensorNum: "1", vibrationPort: "3001" },
+    			props: { sensorNum: "1", vibrationPort: "1" },
     			$$inline: true
     		});
 
     	block1 = new Block({
-    			props: { sensorNum: "2", vibrationPort: "3002" },
+    			props: { sensorNum: "2", vibrationPort: "2" },
     			$$inline: true
     		});
 
     	block2 = new Block({
-    			props: { sensorNum: "3", vibrationPort: "3003" },
+    			props: { sensorNum: "3", vibrationPort: "3" },
     			$$inline: true
     		});
 
     	block3 = new Block({
-    			props: { sensorNum: "4", vibrationPort: "3004" },
+    			props: { sensorNum: "4", vibrationPort: "4" },
     			$$inline: true
     		});
 
