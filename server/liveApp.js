@@ -7,7 +7,7 @@ const axios = require('axios');
 const app = express();
 const httpServer = createServer(app);
 const port = 3000
-const portList = [3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008]
+const portList = [1, 2, 3, 4]
 const modeList = ["pump", "pump", "pump", "pump"]
 const dataList = Object()
 
@@ -34,7 +34,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on('mode', async (packet) => {
-        modeList[packet.port - 3000] = packet.mode
+        modeList[packet.port] = packet.mode
     });
 });
 
@@ -63,7 +63,7 @@ function makeSensorSocket(port) {
             if (dataList[port].length > maxDataSize) {
                 axios({
                     method: 'post',
-                    url: `http://127.0.0.1:8000/model/${modeList[port - 3000]}`,
+                    url: `http://127.0.0.1:8000/model/${modeList[port]}`,
                     data: {
                         array: dataList[port],
                     }
@@ -91,16 +91,6 @@ function makeSensorSocket(port) {
         client.on('timeout', () => {
             console.log('Socket Timed out');
         });
-
-        function log() {
-            console.log(dataList)
-            console.log(`server ${port}`)
-            console.log('Received data from client on port %d: %s', client.remotePort, packet.toString());
-            console.log('  Bytes received: ' + client.bytesRead);
-            console.log(date)
-            console.log(data)
-            console.log('----------------------------------------')
-        }
     });
 
     server.listen(port, () => {
