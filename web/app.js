@@ -8,7 +8,7 @@ const path = require('path');
 const app = express();
 const httpServer = createServer(app);
 const port = 3000
-const portList = [1, 2, 3, 4]
+const portList = [3001, 3002, 3003, 3004]
 const modeList = ["pump", "pump", "pump", "pump"]
 const dataList = Object()
 
@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on('mode', async (packet) => {
-        modeList[packet.port] = packet.mode
+        modeList[packet.port - 3000] = packet.mode
     });
 });
 
@@ -64,7 +64,7 @@ function makeSensorSocket(port) {
             if (dataList[port].length > maxDataSize) {
                 axios({
                     method: 'post',
-                    url: `http://127.0.0.1:8000/model/${modeList[port]}`,
+                    url: `http://127.0.0.1:8000/model/${modeList[port - 3000]}`,
                     data: {
                         array: dataList[port],
                     }
@@ -117,5 +117,5 @@ webApp.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 webApp.listen(webAppPort, () => {
-    console.log(`Server is up at port \t http://localhost:${webAppPort}`);
+    console.log(`web is open at \t http://localhost:${webAppPort}`);
 });
