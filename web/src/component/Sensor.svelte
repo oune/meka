@@ -56,8 +56,9 @@
         console.log(data);
     });
 
-    let selected;
+    let selected = "none";
     let options = [
+        { id: "none", text: `센서 없음` },
         { id: "pump", text: `펌프 진동센서` },
         { id: "motor", text: `모터 진동센서` },
     ];
@@ -69,7 +70,10 @@
         });
         model_res = 0;
         isEmpty = true;
+        console.log(selected);
     }
+
+    console.log(selected);
 </script>
 
 <h2>
@@ -85,7 +89,7 @@
 <form>
     <select bind:value={selected} on:change={select_change}>
         {#each options as option}
-            <option value={option}>
+            <option value={option.id}>
                 {option.text}
             </option>
         {/each}
