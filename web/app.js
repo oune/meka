@@ -62,21 +62,23 @@ function makeSensorSocket(port) {
             // const maxDataSize = 5
             const maxDataSize = 50000
             if (dataList[port].length > maxDataSize) {
-                axios({
-                    method: 'post',
-                    url: `http://127.0.0.1:8000/model/${modeList[port - 3000]}`,
-                    data: {
-                        array: dataList[port],
-                    }
-                }).then((response) => {
-                    sockets.forEach(async (socket) => {
-                        socket.emit("model_result", { res: response.data })
-                    });
-                }).catch((error) => {
-                    console.log("error")
-                    console.log(error.message)
-                    console.log(error.request)
-                })
+                if (modeList[port - 3000] != 'none') {
+                    axios({
+                        method: 'post',
+                        url: `http://127.0.0.1:8000/model/${modeList[port - 3000]}`,
+                        data: {
+                            array: dataList[port],
+                        }
+                    }).then((response) => {
+                        sockets.forEach(async (socket) => {
+                            socket.emit("model_result", { res: response.data })
+                        });
+                    }).catch((error) => {
+                        console.log("error")
+                        console.log(error.message)
+                        console.log(error.request)
+                    })
+                }
                 dataList[port] = []
             }
         });
