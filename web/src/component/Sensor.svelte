@@ -70,10 +70,7 @@
         });
         model_res = 0;
         isEmpty = true;
-        console.log(selected);
     }
-
-    console.log(selected);
 </script>
 
 <h2>
@@ -97,7 +94,7 @@
 </form>
 
 {#if isEmpty}
-    <p>수신한 데이터가 없습니다.</p>
+    <p>수신한 모델 결과가 없습니다.</p>
 {:else}
     <Chart {data} type="line" bind:this={chartRef} />
 {/if}

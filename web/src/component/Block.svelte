@@ -7,7 +7,7 @@
 
 <div>
     <h2>
-        {sensorNum}번 센서
+        {sensorNum}번 포트
     </h2>
     <Sensor port={vibrationPort} />
 </div>
