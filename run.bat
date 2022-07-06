@@ -1,5 +1,5 @@
 @echo off
-title ê³ ì¥ì§„ë‹¨ ì‹œìŠ¤í…œ ì„œë²„
+title °íÀåÁø´Ü ½Ã½ºÅÛ ¼­¹ö
 
 echo start main server
 start /b /d "./server" nodemon liveApp.js
