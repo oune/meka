@@ -11,7 +11,8 @@ from scipy.stats import iqr
 
 
 class Model:
-    columns = ['Mean', 'RMS', 'VAR', 'STD', 'GSTD', 'IQR', 'SEM', 'MAX_H', 'MIN_H', 'KUR', 'SKEW', 'CF']
+    columns = ['Mean', 'RMS', 'VAR', 'STD', 'GSTD', 'IQR',
+               'SEM', 'MAX_H', 'MIN_H', 'KUR', 'SKEW', 'CF']
 
     def __init__(self, value, is_init):
         if is_init is True:
@@ -74,7 +75,8 @@ class Model:
         a = []  # create an empty list
 
         for i in range(size):  # run a loop to compute every signal in the variable
-            x = np.std(Hss[:, i])  # compute standard deviation(표준편차) for each signal
+            # compute standard deviation(표준편차) for each signal
+            x = np.std(Hss[:, i])
             a.append(x)  # store the value to empty array
 
         STD_H = np.array(a)  # convert list to array
@@ -148,7 +150,8 @@ class Model:
         a = []  # create an empty list
 
         for i in range(size):  # run a loop to compute every signal in the variable
-            x = max(Hss[:, i]) / RMS_H[i]  # compute Crest Factor for each signal
+            # compute Crest Factor for each signal
+            x = max(Hss[:, i]) / RMS_H[i]
             a.append(x)  # store the value to empty array
 
         CF_H = np.array(a)  # convert list to array
@@ -163,16 +166,18 @@ class Model:
 
         return Motor_FT
 
-    def __feature_process(self, data_frame, batch_size=5110):
+    def __feature_process(self, data_frame, batch_size=512):
         before = 0
         train_data = pd.DataFrame(np.zeros((1, 12)), columns=Model.columns)
 
         if len(data_frame) <= batch_size:
-            features = self.__extract_feature(data_frame.to_numpy().reshape(-1, 1))
+            features = self.__extract_feature(
+                data_frame.to_numpy().reshape(-1, 1))
             return features
 
         for i in tqdm(range(batch_size, len(data_frame), batch_size)):
-            features = self.__extract_feature(data_frame[before:i].to_numpy().reshape(-1, 1))
+            features = self.__extract_feature(
+                data_frame[before:i].to_numpy().reshape(-1, 1))
             before = i
             train_data = train_data.append(features, ignore_index=True)
 
