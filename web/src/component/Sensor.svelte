@@ -37,7 +37,11 @@
     };
 
     socket.on("model_result", (res) => {
-        const predicted = res.res.predicted[0];
+        const predicted = res.res.predicted.some((e) => {
+            return e === 1;
+        })
+            ? 1
+            : -1;
         model_res = predicted;
         isEmpty = false;
 
