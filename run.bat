@@ -1,8 +1,8 @@
 @echo off
-title °íÀåÁø´Ü ½Ã½ºÅÛ ¼­¹ö
+title ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 echo start main server
-start /b /d "./server" nodemon liveApp.js
+start /b /d "./server" node app.js
 
 echo start model server
 start /b /d "./modelserver" uvicorn main:app
