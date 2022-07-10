@@ -13,6 +13,7 @@ import configparser
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+
 class Model:
     columns = ['Mean', 'RMS', 'VAR', 'STD', 'GSTD', 'IQR',
                'SEM', 'MAX_H', 'MIN_H', 'KUR', 'SKEW', 'CF']
@@ -169,7 +170,7 @@ class Model:
 
         return Motor_FT
 
-    def __feature_process(self, data_frame, batch_size=config['model']['batchsize']):
+    def __feature_process(self, data_frame, batch_size=int(config['model']['batchsize'])):
         before = 0
         train_data = pd.DataFrame(np.zeros((1, 12)), columns=Model.columns)
 
