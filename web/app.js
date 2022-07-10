@@ -61,7 +61,7 @@ function makeSensorSocket(port) {
             //});
 
             // const maxDataSize = 5
-            const maxDataSize = 50000
+            const maxDataSize = 5000
             if (dataList[port].length > maxDataSize) {
                 if (modeList[port - 3000] != 'none') {
                     axios({
