@@ -9,7 +9,7 @@ const app = express();
 const httpServer = createServer(app);
 const port = 3000
 const portList = [3001, 3002, 3003, 3004]
-const modeList = ["pump", "pump", "pump", "pump"]
+const modeList = ["none", "none", "none", "none"]
 const dataList = Object()
 
 portList.forEach((portNum) => {
@@ -35,6 +35,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on('mode', async (packet) => {
+        console.log(`mode change to ${packet.mode}`)
         modeList[packet.port - 3000] = packet.mode
     });
 });
@@ -76,7 +77,9 @@ function makeSensorSocket(port) {
                     }).catch((error) => {
                         console.log("error")
                         console.log(error.message)
-                        console.log(error.request)
+                        // console.log(error.request)
+                        console.log("modeList")
+                        console.log(modeList)
                     })
                 }
                 dataList[port] = []
