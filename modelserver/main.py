@@ -3,11 +3,19 @@ from fastapi import FastAPI
 import model
 from pydantic import BaseModel
 import pandas as pd
-import numpy as np
+import configparser
+import os
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+modelPath = config['model']['modelPath']
+motorPath = os.path.join(modelPath, config['model']['motorModelFileName'])
+pumpPath = os.path.join(modelPath, config['model']['pumpmodelfilename'])
 
 app = FastAPI()
-motor = model.Model.load_model('../model/motor.pkl')
-pump = model.Model.load_model('../model/pump.pkl')
+motor = model.Model.load_model(motorPath)
+pump = model.Model.load_model(pumpPath)
 
 
 class Data(BaseModel):
