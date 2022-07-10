@@ -70,7 +70,7 @@
     function select_change() {
         socket.emit("mode", {
             port: port.toString(),
-            mode: selected.id,
+            mode: selected,
         });
         model_res = 0;
         isEmpty = true;
