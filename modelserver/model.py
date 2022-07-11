@@ -199,10 +199,8 @@ class Model:
 if __name__ == '__main__':
     arr = np.random.randn(100)
     df = pd.DataFrame(arr).astype('float')
-    motor = Model.load_model('motor_tmp.pkl')
-    pump = Model.load_model('pump_tmp.pkl')
+    motor = Model.load_model('../model/motor_tmp.pkl')
+    pump = Model.load_model('../model/pump_tmp.pkl')
     print("model loaded")
     a, b = motor.predict(df)
-    print(type(a[0]))
-    print(type(b))
     print({"res": a, "score": b})
