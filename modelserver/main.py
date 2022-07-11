@@ -7,7 +7,7 @@ import configparser
 import os
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('../config.ini')
 
 modelPath = config['model']['modelPath']
 motorPath = os.path.join(modelPath, config['model']['motorModelFileName'])
