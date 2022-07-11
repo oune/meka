@@ -11,7 +11,7 @@ from scipy.stats import iqr
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('../config.ini')
 
 
 class Model:
@@ -183,7 +183,7 @@ class Model:
             features = self.__extract_feature(
                 data_frame[before:i].to_numpy().reshape(-1, 1))
             before = i
-            train_data = train_data.append(features, ignore_index=True)
+            train_data = pd.concat([train_data, features], ignore_index=True)
 
         return train_data[1:]
 
