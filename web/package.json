@@ -7,7 +7,7 @@
     },
     "scripts": {
         "build": "rollup -c",
-        "buildApp": "pkg .",
+        "buildApp": "pkg . -t node16-win-x64 -o app",
         "dev": "rollup -c -w",
         "start": "sirv public --no-clear"
     },
