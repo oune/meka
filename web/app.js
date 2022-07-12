@@ -4,12 +4,18 @@ const { Server } = require("socket.io");
 const net = require('net');
 const axios = require('axios');
 const path = require('path');
+const fs = require('fs')
+const ini = require('ini')
+
+const config = ini.parse(fs.readFileSync('../config.ini', 'utf-8'))
+const batchsize = Number(config.web.batchsize)
+console.log(`batch size : ${batchsize}`)
 
 const app = express();
 const httpServer = createServer(app);
 const port = 3000
 const portList = [3001, 3002, 3003, 3004]
-const modeList = ["none", "none", "none", "none"]
+const modeList = ["none", "none", "none", "none", "none"]
 const dataList = Object()
 
 portList.forEach((portNum) => {
@@ -61,8 +67,7 @@ function makeSensorSocket(port) {
             //});
 
             // const maxDataSize = 5
-            const maxDataSize = 5000
-            if (dataList[port].length > maxDataSize) {
+            if (dataList[port].length > batchsize) {
                 if (modeList[port - 3000] != 'none') {
                     axios({
                         method: 'post',
