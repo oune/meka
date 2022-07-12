@@ -8,14 +8,19 @@ import os
 
 config = configparser.ConfigParser()
 config.read('../config.ini')
+print('config loaded')
 
 modelPath = config['model']['modelPath']
 motorPath = os.path.join(modelPath, config['model']['motorModelFileName'])
 pumpPath = os.path.join(modelPath, config['model']['pumpmodelfilename'])
 
+print('motor model path = ' + motorPath)
+print('pump model path = ' + pumpPath)
+
 app = FastAPI()
 motor = model.Model.load_model(motorPath)
 pump = model.Model.load_model(pumpPath)
+print('model loaded')
 
 
 class Data(BaseModel):
