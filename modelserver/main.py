@@ -27,7 +27,6 @@ class Data(BaseModel):
     array: List[float]
 
 
-# 만개 단위로 송수신
 @app.post("/model/pump")
 def detect_pump(data: Data):
     df = pd.DataFrame(data.array).astype('float')
