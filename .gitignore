@@ -1,5 +1,10 @@
 node_modules/
 /public/build/
+/dist/
+/build/
 model/
+ni/
+/sensor/data
 
 .DS_Store
+.ipynb_checkpoints
