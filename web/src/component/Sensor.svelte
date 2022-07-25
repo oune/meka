@@ -45,6 +45,10 @@
         model_res = predicted;
         isEmpty = false;
 
+        if (model_res == -1) {
+            detectError(port);
+        }
+
         const scores = res.res.score;
         const predicts = res.res.predicted;
 
@@ -74,6 +78,17 @@
         });
         model_res = 0;
         isEmpty = true;
+    }
+
+    function detectError(port) {
+        let notification;
+        let notificationPermission = Notification.permission;
+        if (notificationPermission === "granted") {
+            //Notification을 이미 허용한 사람들에게 보여주는 알람창
+            notification = new Notification(`고장감지 시스템`, {
+                body: `${port}포트 ${selected} 고장이 감지됨`,
+            });
+        }
     }
 </script>
 

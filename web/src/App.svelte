@@ -1,5 +1,7 @@
 <script>
     import Block from "./component/Block.svelte";
+
+    Notification.requestPermission();
 </script>
 
 <body>
