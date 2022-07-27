@@ -17,25 +17,25 @@ class Data(BaseModel):
 
 
 @app.get("/")
-def get_webpage():
+async def get_webpage():
     return ""
 
 
 @app.post("/model/pump")
-def detect_pump(data: Data):
+async def detect_pump(data: Data):
     return ""
 
 
 @app.post("/model/motor")
-def detect_pump(data: Data):
+async def detect_pump(data: Data):
     return ""
 
 
 @app.get("/config")
-def get_config():
+async def get_config():
     return ""
 
 
 @app.put("/config")
-def update_config(data):
+async def update_config(data):
     return ""
