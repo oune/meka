@@ -1,5 +1,5 @@
 <script>
-    import Block from "./component/Block.svelte";
+    import Block from "./component/SensorBlock.svelte";
 
     Notification.requestPermission();
 </script>
