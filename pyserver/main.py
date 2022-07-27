@@ -2,6 +2,7 @@ from typing import List
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from sensor import Sensor
 import pandas as pd
 import configparser
 
@@ -16,18 +17,19 @@ class Data(BaseModel):
     array: List[float]
 
 
+sensor = Sensor.vib("cDAQ1Mod1", "ai0:3", 51200, 51200)
+
+
+async def detect_pump(data: Data):
+    return ""
+
+
+async def detect_pump(data: Data):
+    return ""
+
+
 @app.get("/")
 async def get_webpage():
-    return ""
-
-
-@app.post("/model/pump")
-async def detect_pump(data: Data):
-    return ""
-
-
-@app.post("/model/motor")
-async def detect_pump(data: Data):
     return ""
 
 
