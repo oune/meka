@@ -1,15 +1,8 @@
-const axios = require('axios');
+a = [1, -1, -1, -1, -1]
+console.log(a)
 
-axios({
-    method: 'post',
-    url: `http://202.31.197.145:21/model/pump`,
-    data: {
-        array: [1, 2, 3, 4],
-    }
-}).then((response) => {
-    console.log(response.data);
-}).catch((error) => {
-    console.log("error")
-    console.log(error.message)
-    console.log(error.request)
-})
+b = (a.some((e) => {
+    return e === 1
+})) ? 1 : -1
+
+console.log(b);
