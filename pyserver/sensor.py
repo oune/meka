@@ -25,6 +25,15 @@ class Sensor:
                                              samps_per_chan=samples_per_channel)
 
     @classmethod
+    def of(clc, device: str, channel: str, rate: int, samples_per_channel: int, type: str):
+        if type == 'vib':
+            return Sensor.vib(device, channel,
+                              samples_per_channel, samples_per_channel)
+        elif type == 'temp':
+            return Sensor.temp(device, channel,
+                               samples_per_channel, samples_per_channel)
+
+    @classmethod
     def vib(clc, device: str, channel: str, rate: int, samples_per_channel: int):
         instance = clc(device)
         instance.add_vib_channel(channel)
