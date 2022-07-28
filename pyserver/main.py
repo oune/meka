@@ -1,31 +1,26 @@
 from typing import List
 from fastapi import FastAPI
 from pydantic import BaseModel
+import pandas as pd
 
 from sensor import Sensor
-import pandas as pd
-import configparser
+import config
 
-config = configparser.ConfigParser()
-config.read('config.ini')
+device_name, device_channel_name, sampling_rate, samples_per_channel, type = config.load(
+    'config.ini')
 
-modelPath = config['model']['modelPath']
+sensor = Sensor.of(device_name, device_channel_name,
+                   sampling_rate, samples_per_channel, type)
+
+
+async def detect_pump(data: List[float]):
+    return ""
+
+
+async def detect_pump(data: List[float]):
+    return ""
+
 app = FastAPI()
-
-
-class Data(BaseModel):
-    array: List[float]
-
-
-sensor = Sensor.vib("cDAQ1Mod1", "ai0:3", 51200, 51200)
-
-
-async def detect_pump(data: Data):
-    return ""
-
-
-async def detect_pump(data: Data):
-    return ""
 
 
 @app.get("/")
