@@ -11,6 +11,8 @@ config.read('../config.ini')
 print('config loaded')
 
 modelPath = config['model']['modelPath']
+mode = config['model']['mode']
+
 motorPath = os.path.join(modelPath, config['model']['motorModelFileName'])
 pumpPath = os.path.join(modelPath, config['model']['pumpmodelfilename'])
 
@@ -31,7 +33,15 @@ class Data(BaseModel):
 def detect_pump(data: Data):
     df = pd.DataFrame(data.array).astype('float')
     a, b = motor.predict(df)
-    return {"predicted": a.tolist(), "score": b.tolist()}
+
+    a = a.tolist()
+
+    if mode == 'demo':
+        b = list(map(lambda x: 1, b))
+    else:
+        b = b.tolist()
+
+    return {"predicted": a, "score": b}
 
 
 @app.post("/model/motor")
