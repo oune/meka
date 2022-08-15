@@ -57,6 +57,7 @@ function makeSensorSocket(port) {
 
         client.on('data', async (packet) => {
             const datas = packet.toString().split("\t")
+            console.log('!!!!')
             const last = datas.pop()
 
             dataList[port].push(...datas)
