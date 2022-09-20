@@ -2,6 +2,7 @@ from typing import List
 from pydantic import BaseModel
 from sensor import Sensor
 from fastapi import FastAPI
+from datetime import datetime
 import pandas as pd
 import tensorflow as tf
 import socketio
@@ -40,14 +41,16 @@ def setting_change(_, data: Setting):
     pass
 
 
-mae = tf.keras.models.load_model('model/model_loss_test.h5')
-mse = tf.keras.models.load_model('model/model_loss_test.h5')
+mae = tf.keras.models.load_model('model/')
+mse = tf.keras.models.load_model('model/')
 
 
 async def loop():
     datas = await sensor.read()
-    sio.emit('data', {'data': datas})
-    # TODO request to model
-    # TODO emit 'model_res'
+    now = datetime.now()
+    sio.emit('data', {'sensor_id': 0, 'time': now, 'data': datas})
+    # TODO request to model and get res
+
+    sio.emit('model', {'sensor_id': 0, 'time': now, 'data': datas})
 
 asyncio.run(loop())
