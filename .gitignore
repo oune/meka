@@ -5,6 +5,7 @@ node_modules/
 model/
 ni/
 /sensor/data
+/sensor/file
 
 .DS_Store
 .ipynb_checkpointsrp
