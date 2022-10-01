@@ -28,10 +28,10 @@ class Sensor:
     def of(clc, device: str, channel: str, rate: int, samples_per_channel: int, type: str):
         if type == 'vib':
             return Sensor.vib(device, channel,
-                              samples_per_channel, samples_per_channel)
+                              rate, samples_per_channel)
         elif type == 'temp':
             return Sensor.temp(device, channel,
-                               samples_per_channel, samples_per_channel)
+                               rate, samples_per_channel)
 
     @classmethod
     def vib(clc, device: str, channel: str, rate: int, samples_per_channel: int):
@@ -47,5 +47,5 @@ class Sensor:
         instance.set_timing(rate, samples_per_channel)
         return instance
 
-    async def read(self):
-        return self.task.read(number_of_samples_per_channel=-1)
+    async def read(self, samples_per_channel: int = -1):
+        return self.task.read(number_of_samples_per_channel=samples_per_channel)

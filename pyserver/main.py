@@ -41,12 +41,12 @@ def setting_change(_, data: Setting):
     pass
 
 
+# 모델 로딩
 mae = tf.keras.models.load_model('model/')
-mse = tf.keras.models.load_model('model/')
 
 
 async def loop():
-    datas = await sensor.read()
+    datas = await sensor.read(68000)
     now = datetime.now()
     sio.emit('data', {'sensor_id': 0, 'time': now, 'data': datas})
     # TODO request to model and get res
