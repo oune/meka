@@ -13,56 +13,28 @@
         console.log(`sensor connected on id: ${socket.id}`);
     });
 
-    let count = 0;
-    let isEmpty = true;
-    let port = 0;
-
-    socket.emit("join", port.toString());
-
+    const datas = [
+        {
+            labels: ["1", "2", "3"],
+            datasets: [{ values: [1, 2, 3] }],
+        },
+        {
+            labels: [],
+            datasets: [{ values: [] }],
+        },
+        {
+            labels: [],
+            datasets: [{ values: [] }],
+        },
+        {
+            labels: [],
+            datasets: [{ values: [] }],
+        },
+    ];
     socket.on("data", (arg) => {
-        const { date, data } = arg;
-        isEmpty = false;
+        const { sensor_id, time, data } = arg;
 
-        chartRef.addDataPoint(date, [data]);
-
-        if (count > 50) {
-            chartRef.removeDataPoint(0);
-        } else {
-            count++;
-        }
-    });
-
-    let data = {
-        labels: [],
-        datasets: [{ values: [] }],
-    };
-
-    socket.on("model_result", (res) => {
-        const predicted = res.res.predicted.some((e) => {
-            return e === 1;
-        })
-            ? 1
-            : -1;
-        model_res = predicted;
-        isEmpty = false;
-
-        if (model_res == -1) {
-            detectError(port);
-        }
-
-        const scores = res.res.score;
-        const predicts = res.res.predicted;
-
-        data = {
-            labels: predicts,
-            datasets: [
-                {
-                    values: scores,
-                },
-            ],
-        };
-        console.log(scores);
-        console.log(data);
+        // id 에 따른 데이터 업데이트
     });
 
     function detectError(port) {
@@ -89,10 +61,9 @@
         {/if}
     </h2>
     <div class="sensorContainer">
-        <Block sensorNum="1" />
-        <Block sensorNum="2" />
-        <Block sensorNum="3" />
-        <Block sensorNum="4" />
+        {#each datas as data, i}
+            <Block sensorNum={i + 1} {data} />
+        {/each}
     </div>
 </body>
 
