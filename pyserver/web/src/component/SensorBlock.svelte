@@ -4,7 +4,7 @@
 
     import Chart from "svelte-frappe-charts";
 
-    let data = {
+    export let data = {
         labels: [],
         datasets: [{ values: [] }],
     };
@@ -15,9 +15,9 @@
         {sensorNum}번 포트
     </h2>
 
-    {#if data.datasets.length == 0}
-        <p>수신한 데이터가 없습니다.</p>
-    {:else}
+    {#if data.labels.length}
         <Chart {data} type="line" bind:this={chartRef} />
+    {:else}
+        <p>수신한 데이터가 없습니다.</p>
     {/if}
 </div>
