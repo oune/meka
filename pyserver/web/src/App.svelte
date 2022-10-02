@@ -34,10 +34,16 @@
     socket.on("data", (arg) => {
         const { sensor_id, time, data } = arg;
 
-        // id 에 따른 데이터 업데이트
+        //TODO id 에 따른 데이터 업데이트
+    });
+
+    socket.on("model", (arg) => {
+        //TODO 모델 결과를 받아서 화면을 변경
+        const { time, result } = arg;
     });
 
     function detectError(port) {
+        //TODO port 사용하지 않는 방향으로 개선
         let notification;
         let notificationPermission = Notification.permission;
         if (notificationPermission === "granted") {

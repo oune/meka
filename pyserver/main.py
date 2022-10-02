@@ -50,7 +50,8 @@ async def loop():
     now = datetime.now()
     sio.emit('data', {'sensor_id': 0, 'time': now, 'data': datas})
     # TODO request to model and get res
+    # TODO async await
 
-    sio.emit('model', {'sensor_id': 0, 'time': now, 'data': datas})
+    sio.emit('model', {'time': now, 'result': datas})
 
 asyncio.run(loop())
