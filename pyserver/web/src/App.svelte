@@ -35,7 +35,7 @@
     socket.on("data", (arg) => {
         const { sensor_id, data } = arg;
 
-        const outData = data.slice(0, 25);
+        const outData = data.slice(0, 50);
 
         // update chart
         datas[sensor_id] = {

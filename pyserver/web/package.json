@@ -22,9 +22,11 @@
         "axios": "^0.27.2",
         "express": "^4.18.1",
         "ini": "^3.0.0",
+        "lightweight-charts": "^3.8.0",
         "sirv-cli": "^1.0.0",
         "socket.io": "^4.5.1",
         "socket.io-client": "^4.4.1",
-        "svelte-frappe-charts": "^1.9.1"
+        "svelte-frappe-charts": "^1.9.1",
+        "svelte-lightweight-charts": "^1.6.3"
     }
 }

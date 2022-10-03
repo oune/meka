@@ -1,6 +1,7 @@
 from typing import List
 from pydantic import BaseModel
 from sensor import Sensor
+from time import ctime, time
 
 import tensorflow as tf
 import socketio
@@ -28,7 +29,7 @@ async def loop():
         datas = await sensor.read(samples_per_channel)
 
         for idx, data in enumerate(datas):
-            await sio.emit('data', {'sensor_id': idx, 'data': data})
+            await sio.emit('data', {'sensor_id': idx, 'time': time(), 'data': data})
             await sio.sleep(0)
 
         # TODO request to model and get res
