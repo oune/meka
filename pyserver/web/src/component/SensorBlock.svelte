@@ -31,6 +31,7 @@
             type="line"
             {axisOptions}
             {lineOptions}
+            animate="false"
             bind:this={chartRef}
         />
     {:else}

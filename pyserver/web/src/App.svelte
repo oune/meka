@@ -35,10 +35,13 @@
     socket.on("data", (arg) => {
         const { sensor_id, data } = arg;
 
-        // datas[sensor_id] = {
-        //     labels: [...Array(data.length).keys()],
-        //     datasets: [{ values: data }],
-        // };
+        const outData = data.slice(0, 25);
+
+        // update chart
+        datas[sensor_id] = {
+            labels: [...Array(outData.length).keys()],
+            datasets: [{ values: outData }],
+        };
     });
 
     socket.on("model", (arg) => {
