@@ -13,11 +13,10 @@ import config
 class Setting(BaseModel):
     sensor_id: int
     option: str
-    data: str
+    value: str
 
 
 class Model(BaseModel):
-    sensor_id: int
     sensor_data: List[float]
     model_res: List[int]
 
@@ -26,7 +25,7 @@ device_name, device_channel_name, sampling_rate, samples_per_channel, type = con
     'config.ini')
 
 sensor = Sensor.of(device_name, device_channel_name,
-                   sampling_rate, samples_per_channel, type)
+                   sampling_rate, samples_per_channel * 2, type)
 
 sio = socketio.AsyncServer()
 app = FastAPI()
@@ -46,12 +45,10 @@ mae = tf.keras.models.load_model('model/')
 
 
 async def loop():
-    datas = await sensor.read(68000)
+    datas = await sensor.read(samples_per_channel)
     now = datetime.now()
-    sio.emit('data', {'sensor_id': 0, 'time': now, 'data': datas})
+    await sio.emit('data', {'sensor_id': 0, 'time': now, 'data': datas})
     # TODO request to model and get res
-    # TODO async await
-
-    sio.emit('model', {'time': now, 'result': datas})
+    await sio.emit('model', {'time': now, 'result': datas})
 
 asyncio.run(loop())

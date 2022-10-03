@@ -15,8 +15,8 @@
 
     const datas = [
         {
-            labels: ["1", "2", "3"],
-            datasets: [{ values: [1, 2, 3] }],
+            labels: ["1", "2", "3", "3"],
+            datasets: [{ values: [1, 2, 3, 8] }],
         },
         {
             labels: [],
@@ -42,14 +42,13 @@
         const { time, result } = arg;
     });
 
-    function detectError(port) {
-        //TODO port 사용하지 않는 방향으로 개선
+    function detectError() {
         let notification;
         let notificationPermission = Notification.permission;
         if (notificationPermission === "granted") {
             //Notification을 이미 허용한 사람들에게 보여주는 알람창
             notification = new Notification(`고장감지 시스템`, {
-                body: `${port - 3000}포트 ${selected} 고장이 감지됨`,
+                body: `장치에서 고장이 감지됨`,
             });
         }
     }

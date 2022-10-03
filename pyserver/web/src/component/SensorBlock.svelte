@@ -8,6 +8,16 @@
         labels: [],
         datasets: [{ values: [] }],
     };
+    const axisOptions = {
+        xIsSeries: true, // default: false
+    };
+
+    const lineOptions = {
+        hideDots: 1,
+        spline: 1,
+    };
+
+    const onExport = () => chartRef.exportChart();
 </script>
 
 <div>
@@ -16,8 +26,15 @@
     </h2>
 
     {#if data.labels.length}
-        <Chart {data} type="line" bind:this={chartRef} />
+        <Chart
+            {data}
+            type="line"
+            {axisOptions}
+            {lineOptions}
+            bind:this={chartRef}
+        />
     {:else}
         <p>수신한 데이터가 없습니다.</p>
     {/if}
+    <button on:click={onExport}> save </button>
 </div>
