@@ -28,17 +28,6 @@ sensor = Sensor.of(device_name, device_channel_name,
                    sampling_rate, samples_per_channel * 2, type)
 
 sio = socketio.AsyncServer()
-app = FastAPI()
-app = socketio.WSGIApp(sio, app)
-
-# change my setting by request
-
-
-@app.put('setting')
-def setting_change(_, data: Setting):
-    print(data)
-    pass
-
 
 # 모델 로딩
 mae = tf.keras.models.load_model('model/')
