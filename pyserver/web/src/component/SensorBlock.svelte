@@ -1,6 +1,6 @@
 <script>
     export let sensorNum;
-    export let chartRef;
+    let chartRef;
 
     import Chart from "svelte-frappe-charts";
 

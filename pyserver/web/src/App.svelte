@@ -6,7 +6,7 @@
 
     let model_res = 1;
 
-    const url = `http://localhost:3000`;
+    const url = `http://localhost:8000`;
     const socket = io(url);
 
     socket.on("connect", () => {
@@ -15,8 +15,8 @@
 
     const datas = [
         {
-            labels: ["1", "2", "3", "3"],
-            datasets: [{ values: [1, 2, 3, 8] }],
+            labels: [],
+            datasets: [{ values: [] }],
         },
         {
             labels: [],
@@ -31,22 +31,25 @@
             datasets: [{ values: [] }],
         },
     ];
-    socket.on("data", (arg) => {
-        const { sensor_id, time, data } = arg;
 
-        //TODO id 에 따른 데이터 업데이트
+    socket.on("data", (arg) => {
+        const { sensor_id, data } = arg;
+
+        // datas[sensor_id] = {
+        //     labels: [...Array(data.length).keys()],
+        //     datasets: [{ values: data }],
+        // };
     });
 
     socket.on("model", (arg) => {
         //TODO 모델 결과를 받아서 화면을 변경
-        const { time, result } = arg;
+        const { result } = arg;
     });
 
     function detectError() {
         let notification;
         let notificationPermission = Notification.permission;
         if (notificationPermission === "granted") {
-            //Notification을 이미 허용한 사람들에게 보여주는 알람창
             notification = new Notification(`고장감지 시스템`, {
                 body: `장치에서 고장이 감지됨`,
             });

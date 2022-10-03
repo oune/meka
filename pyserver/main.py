@@ -1,19 +1,14 @@
 from typing import List
 from pydantic import BaseModel
 from sensor import Sensor
-from fastapi import FastAPI
 from datetime import datetime
+
 import pandas as pd
 import tensorflow as tf
 import socketio
 import asyncio
 import config
-
-
-class Setting(BaseModel):
-    sensor_id: int
-    option: str
-    value: str
+import uvicorn
 
 
 class Model(BaseModel):
@@ -27,17 +22,20 @@ device_name, device_channel_name, sampling_rate, samples_per_channel, type = con
 sensor = Sensor.of(device_name, device_channel_name,
                    sampling_rate, samples_per_channel * 2, type)
 
-sio = socketio.AsyncServer()
-
 # 모델 로딩
-mae = tf.keras.models.load_model('model/')
 
 
 async def loop():
-    datas = await sensor.read(samples_per_channel)
-    now = datetime.now()
-    await sio.emit('data', {'sensor_id': 0, 'time': now, 'data': datas})
-    # TODO request to model and get res
-    await sio.emit('model', {'time': now, 'result': datas})
+    while True:
+        datas = await sensor.read(samples_per_channel)
+        await sio.emit('data', {'sensor_id': 0, 'data': datas[0]})
+        await sio.sleep(0)
+        # TODO request to model and get res
+        await sio.emit('model', {'result': datas})
+        await sio.sleep(0)
 
-asyncio.run(loop())
+
+sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
+app = socketio.ASGIApp(sio)
+
+sio.start_background_task(loop)
