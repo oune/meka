@@ -27,16 +27,20 @@ sensor = Sensor.of(device_name,
 
 async def loop():
     while True:
-        datas = await sensor.read(samples_per_channel)
+        datas = await sensor.read(samples_per_channel, 30.0)
 
         for idx, data in enumerate(datas):
             await sio.emit('data', {'sensor_id': idx, 'time': time(), 'data': data})
             await sio.sleep(0)
 
         # TODO request to model and get res
-        model_result = inference(model, datas, scaler, threshold)
+        print(len(datas))
+        print(len(datas[0]))
 
-        await sio.emit('model', {'result': model_result})
+        model_result = inference(model, datas, scaler, threshold)
+        print(model)
+
+        await sio.emit('model', {'time': time(), 'result': model_result})
         await sio.sleep(0)
 
 

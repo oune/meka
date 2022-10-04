@@ -46,7 +46,8 @@
 
     socket.on("model", (arg) => {
         //TODO 모델 결과를 받아서 화면을 변경
-        const { result } = arg;
+        const { time, result } = arg;
+        console.log(time, result);
     });
 
     function detectError() {

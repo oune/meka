@@ -21,7 +21,7 @@ class Sensor:
     def set_timing(self, rate: int, samples_per_channel: int):
         self.task.timing.cfg_samp_clk_timing(rate=rate,
                                              active_edge=nidaqmx.constants.Edge.RISING,
-                                             sample_mode=nidaqmx.constants.AcquisitionType.FINITE,
+                                             sample_mode=nidaqmx.constants.AcquisitionType.CONTINUOUS,
                                              samps_per_chan=samples_per_channel)
 
     @classmethod
@@ -47,5 +47,5 @@ class Sensor:
         instance.set_timing(rate, samples_per_channel)
         return instance
 
-    async def read(self, samples_per_channel: int = -1):
-        return self.task.read(number_of_samples_per_channel=samples_per_channel)
+    async def read(self, samples_per_channel: int = -1, timeout: int = 10):
+        return self.task.read(number_of_samples_per_channel=samples_per_channel, timeout=timeout)
