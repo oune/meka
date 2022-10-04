@@ -2,6 +2,7 @@ from typing import List
 from pydantic import BaseModel
 from sensor import Sensor
 from time import ctime, time
+from Inference.inference import inference, model, scaler, threshold
 
 import tensorflow as tf
 import socketio
@@ -33,7 +34,9 @@ async def loop():
             await sio.sleep(0)
 
         # TODO request to model and get res
-        await sio.emit('model', {'result': datas})
+        model_result = inference(model, datas, scaler, threshold)
+
+        await sio.emit('model', {'result': model_result})
         await sio.sleep(0)
 
 
