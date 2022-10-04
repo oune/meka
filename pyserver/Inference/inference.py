@@ -21,10 +21,10 @@ def inference(model, data, scaler, threshold):
 
     data_0, data_1, data_2, data_3 = data
 
-    data_0 = scaler.transform(np.mean(np.abs(data_0), axis=0))
-    data_1 = scaler.transform(np.mean(np.abs(data_1), axis=0))
-    data_2 = scaler.transform(np.mean(np.abs(data_2), axis=0))
-    data_3 = scaler.transform(np.mean(np.abs(data_3), axis=0))
+    data_0 = np.mean(np.abs(data_0), axis=0)
+    data_1 = np.mean(np.abs(data_1), axis=0)
+    data_2 = np.mean(np.abs(data_2), axis=0)
+    data_3 = np.mean(np.abs(data_3), axis=0)
 
     test_data = np.stack([data_0, data_1, data_2, data_3])
     test_data = test_data.reshape(1, 1, 4)

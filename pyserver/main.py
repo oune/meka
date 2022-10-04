@@ -14,13 +14,13 @@ class Model(BaseModel):
     model_res: List[int]
 
 
-device_name, device_channel_name, sampling_rate, samples_per_channel, type = config.load(
+device_name, device_channel_name, sampling_rate, samples_per_channel, modeltype = config.load(
     'config.ini')
 
 sensor = Sensor.of(device_name,
                    device_channel_name,
                    sampling_rate,
-                   samples_per_channel * 2, type)
+                   samples_per_channel * 2, modeltype)
 
 # 모델 로딩
 
@@ -33,12 +33,7 @@ async def loop():
             await sio.emit('data', {'sensor_id': idx, 'time': time(), 'data': data})
             await sio.sleep(0)
 
-        # TODO request to model and get res
-        print(len(datas))
-        print(len(datas[0]))
-
         model_result = inference(model, datas, scaler, threshold)
-        print(model)
 
         await sio.emit('model', {'time': time(), 'result': model_result})
         await sio.sleep(0)
