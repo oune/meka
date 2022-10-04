@@ -16,7 +16,9 @@ model = tf.keras.models.load_model(model_path)  # load model.h5
 
 
 def inference(model, data, scaler, threshold):
-    data = np.array(data).reshape(4, -1)
+    data = np.array(data)
+    print(data.shape)
+
     data_0, data_1, data_2, data_3 = data
 
     data_0 = scaler.transform(np.mean(np.abs(data_0), axis=0))
