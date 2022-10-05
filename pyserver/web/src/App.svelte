@@ -4,7 +4,7 @@
 
     Notification.requestPermission();
 
-    let model_res = 1;
+    let model_res = true;
 
     const url = `http://localhost:8000`;
     const socket = io(url);
@@ -35,7 +35,7 @@
     socket.on("data", (arg) => {
         const { sensor_id, data } = arg;
 
-        const outData = data.slice(0, 50);
+        const outData = data.slice(0, 10);
 
         // update chart
         datas[sensor_id] = {
@@ -45,9 +45,12 @@
     });
 
     socket.on("model", (arg) => {
-        //TODO 모델 결과를 받아서 화면을 변경
         const { time, result } = arg;
-        console.log(time, result);
+        model_res = result;
+
+        if (result == false) {
+            detectError();
+        }
     });
 
     function detectError() {
@@ -64,12 +67,10 @@
 <body>
     <h1>고장 진단 시스템</h1>
     <h2>
-        상태 : {#if model_res == 1}
+        상태 : {#if model_res == true}
             ✅ 정상
-        {:else if model_res == -1}
-            ❗이상 감지됨
         {:else}
-            대기중
+            ❗이상 감지됨
         {/if}
     </h2>
     <div class="sensorContainer">

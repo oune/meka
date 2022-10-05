@@ -1,23 +1,18 @@
 import numpy as np
 import tensorflow as tf
 import joblib
-# from ae_LSTM import autoencoder_model
-
 
 model_path = r'./models/model.h5'  # model.h5 path
-# StandardScaler -> pipeline.pkl path
 scaler_path = r'./models/pipeline.pkl'
 input_shape = (1, 4)
 threshold = 0.000833  # 유동적으로 지정
 
 scaler = joblib.load(scaler_path)  # load pipeline.pkl
-# model = autoencoder_model(input_shape)  # 여기 부분
 model = tf.keras.models.load_model(model_path)  # load model.h5
 
 
-def inference(model, data, scaler, threshold):
+def mse(model, data):
     data = np.array(data)
-    print(data.shape)
 
     data_0, data_1, data_2, data_3 = data
 
@@ -33,5 +28,11 @@ def inference(model, data, scaler, threshold):
     output = model(test_data).numpy().reshape(1, 4)
     output_mse = np.mean(
         np.power(test_data.numpy().reshape(1, 4) - output, 2), axis=1)
+
+    return output_mse
+
+
+def inference(model, data, threshold):
+    output_mse = mse(model, data)
 
     return (output_mse > threshold).item()
