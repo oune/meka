@@ -19,16 +19,17 @@ sensor = Sensor.of(device_name,
 async def loop():
     while True:
         datas = await sensor.read(samples_per_channel, 30.0)
+        now_time = ctime(time())
 
-        for idx in range(datas):
-            await sio.emit('data', {'sensor_id': idx, 'time': time()})
-            await sio.sleep(0)
+        for idx in range(0, len(datas)):
+            await sio.emit('data', {'sensor_id': idx, 'time': now_time})
+            await sio.sleep(1)
 
-        output_mse = mse(model, datas, threshold)
+        output_mse = mse(model, datas)
         model_result = (output_mse > threshold).item()
 
-        await sio.emit('model', {'time': time(), 'result': model_result})
-        await sio.sleep(0)
+        await sio.emit('model', {'time': now_time, 'mse': output_mse.item(),  'result': model_result})
+        await sio.sleep(1)
 
 
 sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')

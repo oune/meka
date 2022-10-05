@@ -1,5 +1,5 @@
 <script>
-    import Block from "./component/SensorBlock.svelte";
+    import Chart from "svelte-frappe-charts";
     import { io } from "socket.io-client";
 
     Notification.requestPermission();
@@ -13,40 +13,17 @@
         console.log(`sensor connected on id: ${socket.id}`);
     });
 
-    const datas = [
-        {
-            labels: [],
-            datasets: [{ values: [] }],
-        },
-        {
-            labels: [],
-            datasets: [{ values: [] }],
-        },
-        {
-            labels: [],
-            datasets: [{ values: [] }],
-        },
-        {
-            labels: [],
-            datasets: [{ values: [] }],
-        },
-    ];
-
     socket.on("data", (arg) => {
-        const { sensor_id, data } = arg;
+        const { sensor_id, time } = arg;
 
-        const outData = data.slice(0, 10);
-
-        // update chart
-        datas[sensor_id] = {
-            labels: [...Array(outData.length).keys()],
-            datasets: [{ values: outData }],
-        };
+        sensors[sensor_id].lastUpdate = time;
     });
 
     socket.on("model", (arg) => {
-        const { time, result } = arg;
+        const { time, mse, result } = arg;
         model_res = result;
+
+        chartRef.addDataPoint(time, [mse]);
 
         if (result == false) {
             detectError();
@@ -62,6 +39,35 @@
             });
         }
     }
+
+    let chartRef;
+
+    let data = {
+        labels: [],
+        datasets: [{ values: [] }],
+        yMarkers: [
+            {
+                label: "Threshold",
+                value: 0.000833,
+                options: { labelPos: "left" }, // default: 'right'
+            },
+        ],
+    };
+
+    const lineOptions = {
+        hideDots: 0,
+        spline: 1,
+        regionFill: 1,
+    };
+
+    const sensors = [
+        { name: "센서1", lastUpdate: "empty" },
+        { name: "센서2", lastUpdate: "empty" },
+        { name: "센서3", lastUpdate: "empty" },
+        { name: "센서4", lastUpdate: "empty" },
+    ];
+
+    const onExport = () => chartRef.exportChart();
 </script>
 
 <body>
@@ -73,16 +79,20 @@
             ❗이상 감지됨
         {/if}
     </h2>
-    <div class="sensorContainer">
-        {#each datas as data, i}
-            <Block sensorNum={i + 1} {data} />
-        {/each}
-    </div>
+    <Chart
+        {data}
+        type="line"
+        {lineOptions}
+        animate="false"
+        bind:this={chartRef}
+    />
+    <button on:click={onExport}> save </button>
+    {#each sensors as { name, lastUpdate }, i}
+        <h2>
+            {name} : {lastUpdate}
+        </h2>
+    {/each}
 </body>
 
 <style>
-    .sensorContainer {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
 </style>
