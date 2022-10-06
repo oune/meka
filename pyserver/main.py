@@ -1,16 +1,16 @@
-from typing import List
-from pydantic import BaseModel
 from sensor import Sensor
 from time import ctime, time
-from Inference.inference import inference, mse, model, scaler, threshold
+from Inference.inference import mse, model, threshold
 from sys import exit
 
+import uvicorn
 import nidaqmx
 import socketio
 import config
+import os
 
 device_name, device_channel_name, sampling_rate, samples_per_channel, modeltype = config.load(
-    'config.ini')
+    f'config.ini')
 
 try:
     sensor = Sensor.of(device_name,
@@ -43,3 +43,11 @@ sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
 app = socketio.ASGIApp(sio)
 
 sio.start_background_task(loop)
+
+
+def serve():
+    uvicorn.run(app, host=8000)
+
+
+if __name__ == "__main__":
+    serve()

@@ -1,13 +1,13 @@
 import numpy as np
 import tensorflow as tf
-import joblib
+import os
 
-model_path = r'./models/model.h5'  # model.h5 path
-scaler_path = r'./models/pipeline.pkl'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+model_path = f'{BASE_DIR}/models/model.h5'  # model.h5 path
 input_shape = (1, 4)
 threshold = 0.000833  # 유동적으로 지정
 
-scaler = joblib.load(scaler_path)  # load pipeline.pkl
 model = tf.keras.models.load_model(model_path)  # load model.h5
 
 
