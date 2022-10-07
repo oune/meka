@@ -45,7 +45,7 @@ app = socketio.ASGIApp(sio)
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    config = Config(app=app, host="127.0.0.1", port=8000, loop=loop)
+    config = Config(app=app, host=ip, port=port, loop=loop)
     server = Server(config)
     loop.run_until_complete(server.serve())
     loop.run_until_complete(task)

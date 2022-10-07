@@ -28,6 +28,7 @@
         "socket.io": "^4.5.1",
         "socket.io-client": "^4.4.1",
         "svelte-frappe-charts": "^1.9.1",
-        "svelte-lightweight-charts": "^1.6.3"
+        "svelte-lightweight-charts": "^1.6.3",
+        "svelte-simple-modal": "^1.4.1"
     }
 }
