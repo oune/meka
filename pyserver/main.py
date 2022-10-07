@@ -3,11 +3,11 @@ from time import ctime, time
 from Inference.inference import mse, model, threshold
 from sys import exit
 
-import uvicorn
+from uvicorn import Config, Server
 import nidaqmx
 import socketio
 import config
-import os
+import asyncio
 
 device_name, device_channel_name, sampling_rate, samples_per_channel, modeltype, ip, port = config.load(
     f'config.ini')
@@ -40,6 +40,12 @@ async def loop():
 
 
 sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
+task = sio.start_background_task(loop)
 app = socketio.ASGIApp(sio)
 
-sio.start_background_task(loop)
+if __name__ == "__main__":
+    loop = asyncio.get_event_loop()
+    config = Config(app=app, host="127.0.0.1", port=8000, loop=loop)
+    server = Server(config)
+    loop.run_until_complete(server.serve())
+    loop.run_until_complete(task)
