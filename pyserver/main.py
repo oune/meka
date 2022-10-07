@@ -9,7 +9,7 @@ import socketio
 import config
 import os
 
-device_name, device_channel_name, sampling_rate, samples_per_channel, modeltype = config.load(
+device_name, device_channel_name, sampling_rate, samples_per_channel, modeltype, ip, port = config.load(
     f'config.ini')
 
 try:
@@ -43,11 +43,3 @@ sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
 app = socketio.ASGIApp(sio)
 
 sio.start_background_task(loop)
-
-
-def serve():
-    uvicorn.run(app, host=8000)
-
-
-if __name__ == "__main__":
-    serve()
